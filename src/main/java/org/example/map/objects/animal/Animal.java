@@ -1,28 +1,22 @@
-package org.example.map.objects;
+package org.example.map.objects.animal;
 
+import org.example.map.objects.animal.genes.Genes;
 import org.example.map.options.IMapElement;
 import org.example.utils.MapDirection;
-import org.example.utils.MutationOption;
 import org.example.utils.Vector2d;
 
 public class Animal implements IMapElement {
     private Vector2d position;
     private MapDirection direction;
-    private Genes genotype; // TODO: correction variant
-    private int numberOfMutations;
-    private MutationOption mutationOption;
+    private Genes genotype;
     private int energy;
 
-    public Animal(Vector2d position, int energy, int numberOfMutations, MutationOption mutationOption) {
+    public Animal(Vector2d position, int energy, Genes genotype) {
         // Basic parameters.
         this.position = position;
         this.direction = MapDirection.NORTH.randomDirection();
         this.energy = energy;
-
-        // Obtaining genotype basing on mutation type.
-        this.numberOfMutations = numberOfMutations;
-        this.mutationOption = mutationOption;
-        this.genotype = new Genes(this.numberOfMutations, this.mutationOption);
+        this.genotype = genotype;
     }
 
     @Override
@@ -50,5 +44,9 @@ public class Animal implements IMapElement {
 
     public int getEnergy() {
         return energy;
+    }
+
+    public Genes getGenotype() {
+        return genotype;
     }
 }
