@@ -1,4 +1,4 @@
-package org.example.map.objects;
+package org.example.map.objects.plants;
 
 import org.example.utils.Vector2d;
 

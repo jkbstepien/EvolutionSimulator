@@ -1,14 +1,17 @@
-package org.example.map.objects;
+package org.example.map.objects.animal.genes;
 
-import org.example.map.options.IMutation;
-import org.example.utils.MutationOption;
+import org.example.map.objects.animal.Animal;
+import org.example.map.objects.animal.behavior.IAnimalBehavior;
 
 import java.util.*;
 
 public abstract class Genes {
 
-    private final Random randomGenerator;
-    private final List<Integer> genotype;
+    private final Random randomGenerator = new Random();
+    private List<Integer> genotype;
+    private int currentGene;
+    private final IAnimalBehavior makeMove;
+    private final int genesLength;
 
     private List<Integer> randomGenotype(){
         List<Integer> newGenotype = new ArrayList<>();
@@ -34,19 +37,40 @@ public abstract class Genes {
     }
 
 
-    public Genes(Random randomGenerator){
+    public Genes(IAnimalBehavior makeMove,
+                 int genesLength,
+                 int minMutations,
+                 int maxMutations) {
         // Constructor creates genotypes for first animals ever placed on map
+        this.makeMove = makeMove;
+        this.genesLength = genesLength;
+
         genotype = randomGenotype();
         Collections.sort(genotype);
-        mutate();
+
+        mutate(minMutations, maxMutations);
     }
 
 
-    public Genes(Random randomGenerator, Genes father, Genes mother, int percentageFatherEnergy, int percentageMotherEnergy) {
+    public Genes(IAnimalBehavior makeMove,
+                 Animal father,
+                 Animal mother,
+                 int minMutations,
+                 int maxMutations) {
         // Constructor creates genotypes for descendants of first animals.
-        this(randomGenerator);
-        genotype = inheritedGenotype(father, mother, percentageFatherEnergy, percentageMotherEnergy);
-        mutate();
+        this.genesLength = father.getGenotype().getGenesLength();
+        this.makeMove = makeMove;
+
+        genotype = inheritedGenotype(father.getGenotype(),
+                mother.getGenotype(),
+                percentageFatherEnergy,
+                percentageMotherEnergy);
+        // TODO: calculate percentageFatherEnergy and percentageMotherEnergy
+        mutate(minMutations, maxMutations);
+    }
+
+    private int getGenesLength() {
+        return genesLength;
     }
 
     public String toString() {
@@ -59,6 +83,11 @@ public abstract class Genes {
         return genotype.get(randomGenerator.nextInt(32));
     }
 
+    public Integer getMoveDirection() {
+        //
+        currentGene++;
+        return makeMove.getGene(genotype, currentGene);
+    }
     @Override
     public int hashCode() {
         return Objects.hash(genotype);
@@ -76,5 +105,5 @@ public abstract class Genes {
         return genotype;
     }
 
-    protected abstract void mutate();
+    protected abstract void mutate(int minMutations, int maxMutations);
 }
