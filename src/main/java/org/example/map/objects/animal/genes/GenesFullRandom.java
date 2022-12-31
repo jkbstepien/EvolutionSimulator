@@ -3,18 +3,29 @@ package org.example.map.objects.animal.genes;
 import org.example.map.objects.animal.Animal;
 import org.example.map.objects.animal.behavior.IAnimalBehavior;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GenesFullRandom extends Genes{
 
-    public GenesFullRandom(IAnimalBehavior makeMove, int genesLength, int minMutations, int maxMutations) {
-        super(makeMove, genesLength, minMutations, maxMutations);
+    private GeneChoice geneChoice;
+
+    public GenesFullRandom(IAnimalBehavior makeMove, int genesLength) {
+        super(makeMove, genesLength);
     }
 
-    public GenesFullRandom(IAnimalBehavior makeMove, Animal father, Animal mother, int percentageFatherEnergy, int percentageMotherEnergy) {
-        super(makeMove, father, mother, percentageFatherEnergy, percentageMotherEnergy);
+    public GenesFullRandom(IAnimalBehavior makeMove,
+                           Genes fatherGenes,
+                           Genes motherGenes,
+                           int fatherEnergy,
+                           int motherEnergy,
+                           int minMutations,
+                           int maxMutations) {
+        super(makeMove, fatherGenes, motherGenes, fatherEnergy, motherEnergy, minMutations, maxMutations);
     }
 
     @Override
-    protected void mutate(int minMutations, int maxMutations) {
-
+    protected Integer mutatedGene(Integer gene){
+        return randomGenerator.nextInt(differentGenes);
     }
 }

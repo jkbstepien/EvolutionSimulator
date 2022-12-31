@@ -5,16 +5,25 @@ import org.example.map.objects.animal.behavior.IAnimalBehavior;
 
 public class GenesSlightCorrection extends Genes{
 
-    public GenesSlightCorrection(IAnimalBehavior makeMove, int genesLength, int minMutations, int maxMutations) {
-        super(makeMove, genesLength, minMutations, maxMutations);
+    public GenesSlightCorrection(IAnimalBehavior makeMove, int genesLength) {
+        super(makeMove, genesLength);
     }
 
-    public GenesSlightCorrection(IAnimalBehavior makeMove, Animal father, Animal mother, int percentageFatherEnergy, int percentageMotherEnergy) {
-        super(makeMove, father, mother, percentageFatherEnergy, percentageMotherEnergy);
+    public GenesSlightCorrection(IAnimalBehavior makeMove,
+                                 Genes fatherGenes,
+                                 Genes motherGenes,
+                                 int fatherEnergy,
+                                 int motherEnergy,
+                                 int minMutations,
+                                 int maxMutations) {
+        super(makeMove, fatherGenes, motherGenes, fatherEnergy, motherEnergy, minMutations, maxMutations);
     }
 
     @Override
-    protected void mutate(int minMutations, int maxMutations) {
-
+    protected Integer mutatedGene(Integer gene){
+        if(randomGenerator.nextBoolean()){
+            return (gene + 1) % differentGenes;
+        }
+        return (gene + differentGenes - 1) % differentGenes;
     }
 }

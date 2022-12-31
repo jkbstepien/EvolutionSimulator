@@ -1,6 +1,7 @@
 package org.example.utils;
 
 import java.util.Objects;
+import java.util.Random;
 
 public class Vector2d {
 
@@ -10,6 +11,14 @@ public class Vector2d {
     public Vector2d(int x, int y) {
         this.x = x;
         this.y = y;
+    }
+
+    public static Vector2d randomVector(int minX, int maxX, int minY, int maxY){
+        Random generator = new Random();
+        int newX = generator.nextInt(maxX - minX) + minX;
+        int newY = generator.nextInt(maxY - minY) + minY;
+        return new Vector2d(newX, newY);
+
     }
 
     public String toString() {

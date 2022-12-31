@@ -11,8 +11,11 @@ public class Animal implements IMapElement {
     private Genes genotype;
     private int energy;
 
+    private int age;
+
     public Animal(Vector2d position, int energy, Genes genotype) {
         // Basic parameters.
+        this.age = 0;
         this.position = position;
         this.direction = MapDirection.NORTH.randomDirection();
         this.energy = energy;

@@ -1,10 +1,16 @@
 package org.example.map.objects.animal.behavior;
 
-import java.util.List;
+import java.util.Random;
 
 public class AnimalBehaviorCrazy implements IAnimalBehavior {
+
+    private final Random randomGenerator = new Random();
+
     @Override
-    public int getGene(List<Integer> genes, int current) {
-        return 0;
+    public int nextGeneIndex(int current, int genesLength) {
+        if(randomGenerator.nextInt(5) <= 3){
+            return (current + 1) % genesLength;
+        }
+        return randomGenerator.nextInt(genesLength);
     }
 }

@@ -5,6 +5,8 @@ import org.example.map.options.IEdge;
 import org.example.map.objects.plants.IPlants;
 
 public class MapBuilder {
+    // TODO default values (useful when some methods are not used)
+
     // Map parameters
     private int width;
     private int height;
