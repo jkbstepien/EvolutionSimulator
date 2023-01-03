@@ -38,9 +38,8 @@ public enum MapDirection {
         };
     }
 
-    public MapDirection randomDirection(){
-        Random random = new Random();
-        return switch (random.nextInt(8)){
+    public static MapDirection fromInt(int value){
+        return switch (value) {
             case 0 -> MapDirection.NORTH;
             case 1 -> MapDirection.NORTHEAST;
             case 2 -> MapDirection.EAST;
@@ -49,9 +48,13 @@ public enum MapDirection {
             case 5 -> MapDirection.SOUTHWEST;
             case 6 -> MapDirection.WEST;
             case 7 -> MapDirection.NORTHWEST;
-
-            default -> throw new IllegalStateException("Unexpected value: " + random.nextInt(8));
+            default -> throw new IllegalStateException("Unexpected value: " + value);
         };
+    }
+
+    public MapDirection randomDirection(){
+        Random random = new Random();
+        return MapDirection.fromInt(random.nextInt(8));
     }
 
     public MapDirection previous(){
