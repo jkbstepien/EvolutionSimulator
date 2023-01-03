@@ -5,7 +5,7 @@ import org.example.map.objects.animal.IAnimalObserver;
 import org.example.utils.Vector2d;
 
 public interface IPlants {
-    void setWorldMap(WorldMap map);
+//    void setWorldMap(WorldMap map);
 
     // Deals with plants seeding variants:
     // Forested equators or toxic corpses.
