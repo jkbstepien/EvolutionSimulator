@@ -43,15 +43,15 @@ public record Preferences(
 
         IPlants iPlantsImplementation;
         if (iPlants.equals("equator")) {
-            iPlantsImplementation = new PlantsEquator();
+            iPlantsImplementation = new PlantsEquator(width, height);
         } else {
-            iPlantsImplementation = new PlantsToxicCorpses();
+            iPlantsImplementation = new PlantsToxicCorpses(width, height);
         }
         IEdge iEdgeImplementation;
         if (iEdge.equals("earth")) {
-            iEdgeImplementation = new EdgeEarth();
+            iEdgeImplementation = new EdgeEarth(new Vector2d(0, 0), new Vector2d(width-1, height-1));
         } else {
-            iEdgeImplementation = new EdgeHellPortal();
+            iEdgeImplementation = new EdgeHellPortal(new Vector2d(0, 0), new Vector2d(width-1, height-1));
         }
         return new WorldMap(width,
                 height,

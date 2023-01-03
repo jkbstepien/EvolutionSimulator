@@ -78,13 +78,19 @@ public class Animal implements IMapElement {
         }
     }
 
-    public void move(){
-        int nextGene = genotype.getMoveDirection();
-        direction = MapDirection.fromInt(nextGene);
-        position = position.add(direction.toUnitVector());
+    public void move(Vector2d newPosition){
+        Vector2d oldPosition = this.position;
+        this.position = newPosition;
+
         for(IAnimalObserver observer: observers){
-            observer.animalMoved(this);
+            observer.animalMoved(this, oldPosition);
         }
+    }
+
+    public Vector2d getNewPosition(){
+        int nextGene = genotype.getMoveDirection();
+        MapDirection direction = MapDirection.fromInt(nextGene);
+        return position.add(direction.toUnitVector());
     }
 
     public void checkIfDied(){
@@ -93,5 +99,13 @@ public class Animal implements IMapElement {
                 observer.animalDied(this);
             }
         }
+    }
+
+    public void addEnergy(int energy){
+        this.energy += energy;
+    }
+
+    public void turn() {
+        direction = direction.opposite();
     }
 }

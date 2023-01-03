@@ -11,13 +11,12 @@ public class PlantsEquator implements IPlants, IPlantObserver{
     private final Set<Vector2d> nonEquator = new HashSet<>();
 
     private int equatorStartRow;
-
+    private int mapWidth;
     private int equatorEndRow;
 
     private int equatorRows;
-    private final int mapWidth;
 
-    private final int mapHeight;
+    private int mapHeight;
 
     private final Random generator = new Random();
 
@@ -63,10 +62,20 @@ public class PlantsEquator implements IPlants, IPlantObserver{
     }
 
     public PlantsEquator(int mapWidth, int mapHeight){
-        this.mapHeight = mapHeight;
         this.mapWidth = mapWidth;
+        this.mapHeight = mapHeight;
         calcEquator();
     }
+
+//    private int rowInsideEquator(){
+//        // TODO raise an error if not possible
+//        return equator.get(generator.nextInt(equator.size()));
+//    }
+//
+//    private int rowOutsideEquator() {
+//        // TODO raise an error if not possible
+//        return nonEquator.get(generator.nextInt(nonEquator.size()));
+//    }
 
     private boolean equatorAccessible(){
         return equator.size() < equatorRows * mapWidth;

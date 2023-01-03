@@ -1,18 +1,20 @@
 package org.example.map;
 
 import org.example.map.objects.animal.Animal;
+import org.example.map.objects.animal.IAnimalObserver;
+import org.example.map.objects.animal.genes.Genes;
 import org.example.map.objects.animal.genes.GenesFactory;
 import org.example.map.objects.plants.Plant;
+import org.example.map.objects.plants.PlantsToxicCorpses;
 import org.example.map.options.IEdge;
 import org.example.map.objects.plants.IPlants;
-import org.example.map.objects.plants.ByCorrespondingValues;
 import org.example.utils.Vector2d;
 
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class WorldMap {
+public class WorldMap implements IAnimalObserver {
     // Map parameters
     private final int width;
     private final int height;
@@ -32,7 +34,7 @@ public class WorldMap {
     private final GenesFactory genesFactory;
 
     // State parameters
-    private final Map<Vector2d, Animal> animals = new HashMap<>();
+    private final Map<Vector2d, List<Animal>> animals = new HashMap<>();
     private final Map<Vector2d, Plant> plants = new HashMap<>();
     private final List<Animal> deadAnimals = new LinkedList<>();
     private final Random generator = new Random();
@@ -63,10 +65,34 @@ public class WorldMap {
         this.genesFactory = genesFactory;
 //        placePlants();
 //        placeAnimals();
-        iPlants.setWorldMap(this);
     }
 
-    private Vector2d plantPosition() throws IllegalArgumentException{
+
+    public List<Vector2d> animalPositionsSortedByDeaths(){
+        Map<Vector2d, Long> deathsCounted = deadAnimals.stream()
+                                                        .collect(Collectors.groupingBy(Animal::getPosition, Collectors.counting()));
+        Vector2d[] positions = deathsCounted.keySet()
+                                            .toArray(Vector2d[]::new);
+        Long[] deaths = deathsCounted.values()
+                                    .toArray(Long[]::new);
+        Integer[] indexes = IntStream.range(0,deaths.length)
+                                    .boxed()
+                                    .toArray(Integer[]::new);
+//        Arrays.sort(indexes, new ByCorrespondingValues(deaths));
+        return Arrays.stream(indexes)
+                    .map(index->positions[index])
+                    .toList();
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    private Vector2d plantPosition(){
         boolean isPreferred = generator.nextInt(5) != 4;
         try{
             return iPlants.grow(isPreferred);
@@ -93,4 +119,77 @@ public class WorldMap {
         }
     }
 
+    private void moveAnimal(Animal animal){
+        Vector2d v = animal.getNewPosition();
+        Vector2d finalPosition = iEdge.handleMove(v, animal);
+        animal.move(finalPosition);
+    }
+
+    @Override
+    public void animalPlaced(Animal animal) {
+        Vector2d position = animal.getPosition();
+        if(animals.containsKey(position)){
+            animals.get(position).add(animal);
+        } else{
+            animals.put(position, new LinkedList<>(List.of(animal)));
+        }
+    }
+
+    @Override
+    public void animalMoved(Animal animal, Vector2d oldPosition) {
+        animals.get(oldPosition).remove(animal);
+
+        List<Animal> animalsAtNewPosition = animals
+                .computeIfAbsent(animal.getPosition(), k -> new LinkedList<>());
+        animalsAtNewPosition.add(animal);
+    }
+
+    @Override
+    public void animalDied(Animal animal) {
+        animals.get(animal.getPosition()).remove(animal);
+        deadAnimals.add(animal);
+    }
+
+    public void moveAll() {
+        animals.values().stream().flatMap(List::stream).forEach(this::moveAnimal);
+    }
+
+    public void eatPlants() {
+        plants.values().forEach(plant -> {
+            Vector2d position = plant.getPosition();
+            List<Animal> animalsAtPosition = animals.get(position);
+            if(animalsAtPosition != null && !animalsAtPosition.isEmpty()){
+                animalsAtPosition.sort(Comparator.comparingInt(Animal::getEnergy));
+                Animal strongest = animalsAtPosition.get(0);
+                strongest.addEnergy(plantEnergy);
+            }
+        });
+    }
+
+    public void breeding() {
+        animals.values().forEach(animals -> {
+            if (animals.size() > 1) {
+                animals.sort(Comparator.comparingInt(Animal::getEnergy));
+                Animal strongest = animals.get(0);
+                Animal secondStrongest = animals.get(1);
+                if (strongest.getEnergy() >= animalEnergyBreedingThreshold && secondStrongest.getEnergy() >= animalEnergyBreedingThreshold) {
+                    Genes genes = genesFactory.createGenes(strongest, secondStrongest);
+                    Animal child = new Animal(strongest.getPosition(), 2*animalBreedingCost, genes);
+                    strongest.addEnergy(-animalBreedingCost);
+                    secondStrongest.addEnergy(-animalBreedingCost);
+                    child.addObserver(this);
+                    if (iPlants instanceof PlantsToxicCorpses){
+                        child.addObserver((PlantsToxicCorpses) iPlants);
+                    }
+                    child.place();
+                }
+            }
+        });
+    }
+
+    public void growPlants() {
+        for(int i = 0; i < plantsSeededEachDay; i++){
+            placeOnePlant();
+        }
+    }
 }

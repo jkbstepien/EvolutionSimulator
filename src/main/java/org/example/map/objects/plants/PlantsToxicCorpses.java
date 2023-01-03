@@ -8,9 +8,9 @@ import java.util.*;
 
 public class PlantsToxicCorpses implements IPlants, IAnimalObserver, IPlantObserver {
 
-    private final int mapWidth;
+    private int mapWidth;
 
-    private final int mapHeight;
+    private int mapHeight;
 
     private final Set<Vector2d> plantPositions = new HashSet<>();
 
@@ -31,7 +31,8 @@ public class PlantsToxicCorpses implements IPlants, IAnimalObserver, IPlantObser
     }
 
     @Override
-    public void animalMoved(Animal animal){}
+    public void animalMoved(Animal animal, Vector2d oldPosition){
+    }
 
     @Override
     public void animalDied(Animal animal){
