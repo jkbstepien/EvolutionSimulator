@@ -5,10 +5,10 @@ import org.example.utils.Vector2d;
 import java.util.Comparator;
 import java.util.Map;
 
-public class ByDeaths implements Comparator<Vector2d> {
+public class ByDeathsComparator implements Comparator<Vector2d> {
     private final Map<Vector2d, Integer> deaths;
 
-    public ByDeaths(Map<Vector2d, Integer> deaths){
+    public ByDeathsComparator(Map<Vector2d, Integer> deaths){
         this.deaths = deaths;
     }
 

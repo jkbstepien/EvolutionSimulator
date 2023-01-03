@@ -5,21 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c22bfa3f-df9a-4022-889a-2b89d3c8c0d0" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/map/objects/animal/genes/GeneChoice.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/map/MapBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/map/MapBuilder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/map/WorldMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/map/WorldMap.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/map/objects/animal/Animal.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/map/objects/animal/Animal.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/map/objects/animal/behavior/AnimalBehaviorCrazy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/map/objects/animal/behavior/AnimalBehaviorCrazy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/map/objects/animal/behavior/AnimalBehaviorPredestination.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/map/objects/animal/behavior/AnimalBehaviorPredestination.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/map/objects/animal/behavior/IAnimalBehavior.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/map/objects/animal/behavior/IAnimalBehavior.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/map/objects/animal/genes/Genes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/map/objects/animal/genes/Genes.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/map/objects/animal/genes/GenesFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/map/objects/animal/genes/GenesFactory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/map/objects/animal/genes/GenesFullRandom.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/map/objects/animal/genes/GenesFullRandom.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/map/objects/animal/genes/GenesSlightCorrection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/map/objects/animal/genes/GenesSlightCorrection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/map/objects/plants/IPlants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/map/objects/plants/IPlants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/map/objects/plants/ByDeaths.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/map/objects/plants/ByDeathsComparator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/map/objects/plants/PlantsEquator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/map/objects/plants/PlantsEquator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/map/objects/plants/PlantsToxicCorpses.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/map/objects/plants/PlantsToxicCorpses.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/utils/Vector2d.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/utils/Vector2d.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/utils/MapDirection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/utils/MapDirection.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -111,7 +105,13 @@
       <workItem from="1672327361195" duration="3644000" />
       <workItem from="1672415448158" duration="5107000" />
       <workItem from="1672460711063" duration="3879000" />
-      <workItem from="1672466580695" duration="6282000" />
+      <workItem from="1672466580695" duration="7108000" />
+      <workItem from="1672605361416" duration="1855000" />
+      <workItem from="1672626866990" duration="7955000" />
+      <workItem from="1672650967407" duration="5291000" />
+      <workItem from="1672776398157" duration="1685000" />
+      <workItem from="1672779451225" duration="48000" />
+      <workItem from="1672779937223" duration="330000" />
     </task>
     <servers />
   </component>

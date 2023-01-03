@@ -1,14 +1,8 @@
 package org.example.map.objects.animal.genes;
 
-import org.example.map.objects.animal.Animal;
 import org.example.map.objects.animal.behavior.IAnimalBehavior;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class GenesFullRandom extends Genes{
-
-    private GeneChoice geneChoice;
 
     public GenesFullRandom(IAnimalBehavior makeMove, int genesLength) {
         super(makeMove, genesLength);

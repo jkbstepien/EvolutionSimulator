@@ -120,6 +120,7 @@ public abstract class Genes {
         return genotype;
     }
 
+
     protected void mutate(int minMutations, int maxMutations) {
         // change a gene to a different one, repeat
         // TODO ensure minMutations <= maxMutations

@@ -5,6 +5,7 @@ import org.example.map.objects.animal.genes.GenesFactory;
 import org.example.map.objects.plants.Plant;
 import org.example.map.options.IEdge;
 import org.example.map.objects.plants.IPlants;
+import org.example.map.objects.plants.ByCorrespondingValues;
 import org.example.utils.Vector2d;
 
 import java.util.*;
@@ -34,6 +35,7 @@ public class WorldMap {
     private final Map<Vector2d, Animal> animals = new HashMap<>();
     private final Map<Vector2d, Plant> plants = new HashMap<>();
     private final List<Animal> deadAnimals = new LinkedList<>();
+    private final Random generator = new Random();
 
     public WorldMap(int width,
                     int height,
@@ -64,40 +66,31 @@ public class WorldMap {
         iPlants.setWorldMap(this);
     }
 
-//    private void placeOnePlant(){
-//        Vector2d position;
-//        do{
-//            position =
-//        }
-//    }
-//
-//    private void placePlants(){
-//        for(int i = 0; i < numberOfPlantsAtStart; i++){
-//            placeOnePLant();
-//        }
-//    }
-
-    public List<Vector2d> animalPositionsSortedByDeaths(){
-        Map<Vector2d, Long> deathsCounted = deadAnimals.stream()
-                                                        .collect(Collectors.groupingBy(Animal::getPosition, Collectors.counting()));
-        Vector2d[] positions = deathsCounted.keySet()
-                                            .toArray(Vector2d[]::new);
-        Long[] deaths = deathsCounted.values()
-                                    .toArray(Long[]::new);
-        Integer[] indexes = IntStream.range(0,deaths.length)
-                                    .boxed()
-                                    .toArray(Integer[]::new);
-//        Arrays.sort(indexes, new ByCorrespondingValues(deaths));
-        return Arrays.stream(indexes)
-                    .map(index->positions[index])
-                    .toList();
+    private Vector2d plantPosition() throws IllegalArgumentException{
+        boolean isPreferred = generator.nextInt(5) != 4;
+        try{
+            return iPlants.grow(isPreferred);
+        }
+        catch (IllegalArgumentException ex){
+            return iPlants.grow(!isPreferred);
+        }
     }
 
-    public int getWidth() {
-        return width;
+    private void placeOnePlant(){
+        try {
+            Plant plant = new Plant(plantPosition());
+            plants.put(plant.getPosition(), plant);
+        }
+        catch(IllegalArgumentException ignored){
+        }
     }
 
-    public int getHeight() {
-        return height;
+    private void placePlants(){
+        // TODO does map need to place many plants at once?
+        // it might be only the simulation's job
+        for(int i = 0; i < numberOfPlantsAtStart; i++){
+            placeOnePlant();
+        }
     }
+
 }
