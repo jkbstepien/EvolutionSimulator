@@ -9,17 +9,26 @@ import java.util.*;
 
 public class PlantsToxicCorpses implements IPlants, IAnimalObserver {
 
-    private final int mapWidth;
+    private int mapWidth;
 
-    private final int mapHeight;
+    private int mapHeight;
 
     private final Map<Vector2d, Integer> deathsCounted = new HashMap<>();
 
     private final SortedSet<Vector2d> positionsSorted = new TreeSet<>(new ByDeaths(deathsCounted));
 
-    public PlantsToxicCorpses(WorldMap map){
+    public PlantsToxicCorpses() {
+    }
+
+    @Override
+    public void setWorldMap(WorldMap map){
         this.mapWidth = map.getWidth();
         this.mapHeight = map.getHeight();
+    }
+
+    @Override
+    public Vector2d grow(boolean preferred) {
+        return null;
     }
 
     @Override

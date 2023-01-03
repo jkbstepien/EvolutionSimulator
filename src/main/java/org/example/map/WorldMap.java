@@ -5,7 +5,6 @@ import org.example.map.objects.animal.genes.GenesFactory;
 import org.example.map.objects.plants.Plant;
 import org.example.map.options.IEdge;
 import org.example.map.objects.plants.IPlants;
-import org.example.map.objects.plants.ByCorrespondingValues;
 import org.example.utils.Vector2d;
 
 import java.util.*;
@@ -60,22 +59,23 @@ public class WorldMap {
         this.animalEnergyBreedingThreshold = animalEnergyBreedingThreshold;
         this.animalBreedingCost = animalBreedingCost;
         this.genesFactory = genesFactory;
-        placePlants();
-        placeAnimals();
+//        placePlants();
+//        placeAnimals();
+        iPlants.setWorldMap(this);
     }
 
-    private void placeOnePlant(){
-        Vector2d position;
-        do{
-            position =
-        }
-    }
-
-    private void placePlants(){
-        for(int i = 0; i < numberOfPlantsAtStart; i++){
-            placeOnePLant();
-        }
-    }
+//    private void placeOnePlant(){
+//        Vector2d position;
+//        do{
+//            position =
+//        }
+//    }
+//
+//    private void placePlants(){
+//        for(int i = 0; i < numberOfPlantsAtStart; i++){
+//            placeOnePLant();
+//        }
+//    }
 
     public List<Vector2d> animalPositionsSortedByDeaths(){
         Map<Vector2d, Long> deathsCounted = deadAnimals.stream()
@@ -87,7 +87,7 @@ public class WorldMap {
         Integer[] indexes = IntStream.range(0,deaths.length)
                                     .boxed()
                                     .toArray(Integer[]::new);
-        Arrays.sort(indexes, new ByCorrespondingValues(deaths));
+//        Arrays.sort(indexes, new ByCorrespondingValues(deaths));
         return Arrays.stream(indexes)
                     .map(index->positions[index])
                     .toList();

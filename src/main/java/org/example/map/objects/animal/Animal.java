@@ -37,6 +37,11 @@ public class Animal implements IMapElement {
     }
 
     @Override
+    public String getSourceAddress() {
+        return null;
+    }
+
+    @Override
     public Vector2d getPosition() {
         return position;
     }

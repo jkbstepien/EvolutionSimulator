@@ -19,7 +19,7 @@ public class MapBuilder {
     private IPlants iPlants;
 
     // Animals parameters
-    private int NumberOfAnimalsAtStart;
+    private int numberOfAnimalsAtStart;
     private int animalEnergy;
     private int animalEnergyBreedingThreshold;
     private int animalBreedingCost;
@@ -69,7 +69,7 @@ public class MapBuilder {
     }
 
     public MapBuilder withNumberOfAnimalsAtStart(int numberOfAnimalsAtStart) {
-        NumberOfAnimalsAtStart = numberOfAnimalsAtStart;
+        this.numberOfAnimalsAtStart = numberOfAnimalsAtStart;
         return this;
     }
 
@@ -129,7 +129,7 @@ public class MapBuilder {
                 plantEnergy,
                 plantsSeededEachDay,
                 iPlants,
-                NumberOfAnimalsAtStart,
+                numberOfAnimalsAtStart,
                 animalEnergy,
                 animalEnergyBreedingThreshold,
                 animalBreedingCost,

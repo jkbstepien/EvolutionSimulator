@@ -4,7 +4,6 @@ import org.example.map.WorldMap;
 import org.example.utils.Vector2d;
 
 import java.util.*;
-import java.util.stream.IntStream;
 
 public class PlantsEquator implements IPlants, IPlantObserver{
 
@@ -14,9 +13,9 @@ public class PlantsEquator implements IPlants, IPlantObserver{
 
     private final Map<Integer, Integer> rowStats = new HashMap<>();
 
-    private final int mapWidth;
+    private int mapWidth;
 
-    private final int mapHeight;
+    private int mapHeight;
 
     private final Random generator = new Random();
 
@@ -48,7 +47,12 @@ public class PlantsEquator implements IPlants, IPlantObserver{
         equator.forEach(nonEquator::remove);
     }
 
-    public PlantsEquator(WorldMap map){
+    public PlantsEquator() {
+
+    }
+
+    @Override
+    public void setWorldMap(WorldMap map){
         this.mapHeight = map.getHeight();
         this.mapWidth = map.getWidth();
         findEquator();
