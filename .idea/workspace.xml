@@ -6,14 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="c22bfa3f-df9a-4022-889a-2b89d3c8c0d0" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/map/WorldMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/map/WorldMap.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/map/objects/animal/Animal.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/map/objects/animal/Animal.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/map/objects/animal/genes/Genes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/map/objects/animal/genes/Genes.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/map/objects/animal/genes/GenesFullRandom.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/map/objects/animal/genes/GenesFullRandom.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/map/objects/plants/ByDeaths.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/map/objects/plants/ByDeathsComparator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/map/objects/plants/PlantsEquator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/map/objects/plants/PlantsEquator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/map/objects/plants/PlantsToxicCorpses.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/map/objects/plants/PlantsToxicCorpses.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/utils/MapDirection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/utils/MapDirection.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -111,7 +103,7 @@
       <workItem from="1672650967407" duration="5291000" />
       <workItem from="1672776398157" duration="1685000" />
       <workItem from="1672779451225" duration="48000" />
-      <workItem from="1672779937223" duration="330000" />
+      <workItem from="1672779937223" duration="871000" />
     </task>
     <servers />
   </component>
