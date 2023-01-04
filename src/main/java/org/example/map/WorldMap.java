@@ -4,6 +4,7 @@ import org.example.map.objects.animal.Animal;
 import org.example.map.objects.animal.IAnimalObserver;
 import org.example.map.objects.animal.genes.Genes;
 import org.example.map.objects.animal.genes.GenesFactory;
+import org.example.map.objects.plants.IPlantObserver;
 import org.example.map.objects.plants.Plant;
 import org.example.map.objects.plants.PlantsToxicCorpses;
 import org.example.map.options.IEdge;
@@ -16,7 +17,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class WorldMap implements IAnimalObserver {
+public class WorldMap implements IAnimalObserver, IPlantObserver {
     // Map parameters
     private final int width;
     private final int height;
@@ -65,8 +66,8 @@ public class WorldMap implements IAnimalObserver {
         this.animalEnergyBreedingThreshold = animalEnergyBreedingThreshold;
         this.animalBreedingCost = animalBreedingCost;
         this.genesFactory = genesFactory;
-//        placePlants();
-//        placeAnimals();
+        placePlants();
+        placeAnimals();
     }
 
     public int getWidth() {
@@ -88,17 +89,47 @@ public class WorldMap implements IAnimalObserver {
     }
 
     private void placeOnePlant(){
+        Plant plant;
         try {
-            Plant plant = new Plant(plantPosition());
-            plants.put(plant.getPosition(), plant);
+            plant = new Plant(plantPosition(), plantEnergy);
+            plant.addObserver(this);
+            plant.addObserver((IPlantObserver) iPlants);
+            plant.place();
         }
-        catch(IllegalArgumentException ignored){
-        }
+        catch(IllegalArgumentException ignored){}
     }
 
     private void placePlants(){
         for(int i = 0; i < numberOfPlantsAtStart; i++){
             placeOnePlant();
+        }
+    }
+
+    private Vector2d animalCoords(){
+        int x, y;
+        Vector2d position;
+        do{
+            x = generator.nextInt(width);
+            y = generator.nextInt(height);
+            position = new Vector2d(x, y);
+        }while(animals.get(position).size() > 0);
+        return position;
+    }
+
+    private void placeOneAnimal(){
+        Vector2d position = animalCoords();
+        Genes genotype = genesFactory.createGenes();
+        Animal animal = new Animal(position, animalEnergyAtStart, genotype);
+        animal.addObserver(this);
+        if(iPlants instanceof IAnimalObserver) {
+            animal.addObserver((IAnimalObserver) iPlants);
+        }
+        animal.place();
+    }
+
+    private void placeAnimals(){
+        for(int i=0; i<numberOfAnimalsAtStart; i++){
+            placeOneAnimal();
         }
     }
 
@@ -111,10 +142,6 @@ public class WorldMap implements IAnimalObserver {
         } else{
             animals.put(position, new LinkedList<>(List.of(animal)));
         }
-        if(iPlants instanceof IAnimalObserver){
-            animal.addObserver((IAnimalObserver) iPlants);
-        }
-
     }
 
     @Override
@@ -132,6 +159,15 @@ public class WorldMap implements IAnimalObserver {
         deadAnimals.add(animal);
     }
 
+    @Override
+    public void plantEaten(Plant plant){
+        plants.remove(plant);
+    }
+
+    @Override
+    public void plantPlaced(Plant plant){
+        plants.put(plant.getPosition(), plant);
+    }
 
     public void eatPlants() {
         List<Plant> plantsIterator = new ArrayList<>(plants.values());
