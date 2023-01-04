@@ -1,14 +1,72 @@
 package org.example.gui;
 
 
+import org.example.map.WorldMap;
+import org.example.map.objects.animal.Animal;
+import org.example.map.objects.animal.genes.Genes;
+
 import java.util.ArrayList;
-import java.util.Random;
+import java.util.List;
 
 public class SimulationEngine implements Runnable {
+    private final WorldMap map;
+
+    private int day = 0;
+
+    private final List<Animal> animals = new ArrayList<>();
+
+    private int numberOfAllAnimals;
+
+    private int numberOfAllPlants;
+
+    private int freeFields;
+
+    private List<Genes> mostPopularGenotypes;
+
+    private double averageEnergy;
+
+    private int averageDeadsLifespan;
+
+    private final Object lock = new Object();
+
+    private void placeAllAnimals(){
+        // And here comes the problem, because if we moved all map start parameters
+        // it needs so much work
+        // but I can't find a "better" solution now
+        // so I will leave it for you and we will think about it, ok?
+        for(int i=0; i<map.getNumberOfAnimalsAtStart(); i++){
+            Vector2d position = generatePosition();
+            int energy = map.getInitialEnergy();
+            Genes genes = new Genes(map.getMakeMove(), map.getGenesLength());
+            Animal animal = new Animal(position);
+            animal.addObserver(map);
+            animal.place();
+        }
+    }
+
+    private void placeAllPlants()
+
+    public SimulationEngine(WorldMap map){
+        this.map = map;
+    }
+
     @Override
     public void run() {
+        while(true){
+            animals.forEach(Animal::removeIfDied);
+            animals.stream().filter(Animal::isAlive).forEach(animal -> {
+                animal.changeOrientation();
+                animal.move();
+            });
+            map.eatPlants();
+            map.breeding();
+            map.growPlants();
+            day++;
+        }
 
     }
+
+
 
 //    protected IWorldMap map;
 //    protected boolean magicON;

@@ -8,9 +8,11 @@ import org.example.map.objects.plants.Plant;
 import org.example.map.objects.plants.PlantsToxicCorpses;
 import org.example.map.options.IEdge;
 import org.example.map.objects.plants.IPlants;
+import org.example.utils.ByCorrespondingValuesComparator;
 import org.example.utils.Vector2d;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -67,23 +69,6 @@ public class WorldMap implements IAnimalObserver {
 //        placeAnimals();
     }
 
-
-    public List<Vector2d> animalPositionsSortedByDeaths(){
-        Map<Vector2d, Long> deathsCounted = deadAnimals.stream()
-                                                        .collect(Collectors.groupingBy(Animal::getPosition, Collectors.counting()));
-        Vector2d[] positions = deathsCounted.keySet()
-                                            .toArray(Vector2d[]::new);
-        Long[] deaths = deathsCounted.values()
-                                    .toArray(Long[]::new);
-        Integer[] indexes = IntStream.range(0,deaths.length)
-                                    .boxed()
-                                    .toArray(Integer[]::new);
-//        Arrays.sort(indexes, new ByCorrespondingValues(deaths));
-        return Arrays.stream(indexes)
-                    .map(index->positions[index])
-                    .toList();
-    }
-
     public int getWidth() {
         return width;
     }
@@ -112,18 +97,11 @@ public class WorldMap implements IAnimalObserver {
     }
 
     private void placePlants(){
-        // TODO does map need to place many plants at once?
-        // it might be only the simulation's job
         for(int i = 0; i < numberOfPlantsAtStart; i++){
             placeOnePlant();
         }
     }
 
-    private void moveAnimal(Animal animal){
-        Vector2d v = animal.getNewPosition();
-        Vector2d finalPosition = iEdge.handleMove(v, animal);
-        animal.move(finalPosition);
-    }
 
     @Override
     public void animalPlaced(Animal animal) {
@@ -133,6 +111,10 @@ public class WorldMap implements IAnimalObserver {
         } else{
             animals.put(position, new LinkedList<>(List.of(animal)));
         }
+        if(iPlants instanceof IAnimalObserver){
+            animal.addObserver((IAnimalObserver) iPlants);
+        }
+
     }
 
     @Override
@@ -150,18 +132,16 @@ public class WorldMap implements IAnimalObserver {
         deadAnimals.add(animal);
     }
 
-    public void moveAll() {
-        animals.values().stream().flatMap(List::stream).forEach(this::moveAnimal);
-    }
 
     public void eatPlants() {
-        plants.values().forEach(plant -> {
+        List<Plant> plantsIterator = new ArrayList<>(plants.values());
+        plantsIterator.forEach(plant -> {
             Vector2d position = plant.getPosition();
             List<Animal> animalsAtPosition = animals.get(position);
             if(animalsAtPosition != null && !animalsAtPosition.isEmpty()){
                 animalsAtPosition.sort(Comparator.comparingInt(Animal::getEnergy));
                 Animal strongest = animalsAtPosition.get(0);
-                strongest.addEnergy(plantEnergy);
+                plant.beEaten(strongest);
             }
         });
     }
@@ -192,4 +172,56 @@ public class WorldMap implements IAnimalObserver {
             placeOnePlant();
         }
     }
+
+    public int numberOfAllAnimals(){
+        return animals.values()
+                .stream()
+                .mapToInt(List::size)
+                .sum();
+    }
+
+    public int numberOfAllPlants(){
+        return plants.size();
+    }
+
+    public int freeFields(){
+        int usedFields = numberOfAllAnimals();
+        for(Vector2d position: plants.keySet()){
+            if(!animals.containsKey(position)){
+                usedFields++;
+            }
+        }
+        return usedFields;
+    }
+
+    public List<Genes> mostPopularGenotypes(){
+        Map<Genes, Long> genotypesCounted = animals.values()
+            .stream()
+            .flatMap(List::stream)
+            .map(Animal::getGenotype)
+            .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+        return genotypesCounted.keySet()
+                .stream()
+                .sorted(new ByCorrespondingValuesComparator(genotypesCounted))
+                .toList();
+    }
+
+    public double averageEnergy(){
+        OptionalDouble average = animals.values()
+                .stream()
+                .flatMap(List::stream)
+                .map(Animal::getEnergy)
+                .mapToDouble(a->a)
+                .average();
+        return average.isPresent() ? average.getAsDouble() : 0;
+    }
+
+    public double averageDeadsLifespan(){
+        OptionalDouble average = deadAnimals.stream()
+                .map(Animal::getAge)
+                .mapToDouble(a->a)
+                .average();
+        return (average.isPresent() ? average.getAsDouble() : 0);
+    }
+
 }

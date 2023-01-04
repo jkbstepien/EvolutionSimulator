@@ -117,7 +117,7 @@ public abstract class Genes {
     }
 
     public List<Integer> getGenotype(){
-        return genotype;
+        return new ArrayList<>(genotype);
     }
 
 
@@ -137,4 +137,6 @@ public abstract class Genes {
     }
 
     protected abstract Integer mutatedGene(Integer gene);
+
+
 }

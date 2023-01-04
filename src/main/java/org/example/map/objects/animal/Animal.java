@@ -1,13 +1,11 @@
 package org.example.map.objects.animal;
 
-import org.example.map.WorldMap;
 import org.example.map.objects.animal.genes.Genes;
 import org.example.map.options.IMapElement;
 import org.example.utils.MapDirection;
 import org.example.utils.Vector2d;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class Animal implements IMapElement {
@@ -78,27 +76,30 @@ public class Animal implements IMapElement {
         }
     }
 
-    public void move(Vector2d newPosition){
-        Vector2d oldPosition = this.position;
-        this.position = newPosition;
-
+    public void move(){
+        Vector2d oldPosition = position;
+        this.position = position.add(direction.toUnitVector());
         for(IAnimalObserver observer: observers){
             observer.animalMoved(this, oldPosition);
         }
+        age++;
     }
 
-    public Vector2d getNewPosition(){
+    public void changeOrientation(){
         int nextGene = genotype.getMoveDirection();
-        MapDirection direction = MapDirection.fromInt(nextGene);
-        return position.add(direction.toUnitVector());
+        direction = MapDirection.fromInt(nextGene);
     }
 
-    public void checkIfDied(){
-        if(energy == 0){
+    public void removeIfDied(){
+        if(!isAlive()){
             for(IAnimalObserver observer: observers){
                 observer.animalDied(this);
             }
         }
+    }
+
+    public boolean isAlive(){
+        return energy > 0;
     }
 
     public void addEnergy(int energy){
@@ -107,5 +108,9 @@ public class Animal implements IMapElement {
 
     public void turn() {
         direction = direction.opposite();
+    }
+
+    public int getAge(){
+        return age;
     }
 }
