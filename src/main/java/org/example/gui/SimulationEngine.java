@@ -1,6 +1,7 @@
 package org.example.gui;
 
 
+import javafx.application.Platform;
 import org.example.map.WorldMap;
 import org.example.map.objects.animal.Animal;
 import org.example.map.objects.animal.genes.Genes;
@@ -8,7 +9,7 @@ import org.example.map.objects.animal.genes.Genes;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SimulationEngine implements Runnable {
+public class SimulationEngine extends Thread {
     private final WorldMap map;
 
     private int day = 0;
@@ -27,27 +28,41 @@ public class SimulationEngine implements Runnable {
 
     private int averageDeadsLifespan;
 
-    private final Object lock = new Object();
+    private int dayCounter = 0;
 
-    public SimulationEngine(WorldMap map){
+    private SimulationStage simulationStage;
+
+    public SimulationEngine(WorldMap map, SimulationStage simulationStage) {
         this.map = map;
+        this.simulationStage = simulationStage;
     }
 
+    private void day() {
+        dayCounter++;
+        this.map.moveAllAnimals();
+        this.map.eatPlants();
+        this.map.breeding();
+        this.map.growPlants();
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                simulationStage.displayMap();
+            }
+        });
+
+
+    }
     @Override
     public void run() {
-        // rewrite and create methods for map
-//        while(true){
-//            animals.forEach(Animal::removeIfDied);
-//            animals.stream().filter(Animal::isAlive).forEach(animal -> {
-//                animal.changeOrientation();
-//                animal.move();
-//            });
-//            map.eatPlants();
-//            map.breeding();
-//            map.growPlants();
-//            day++;
-//        }
-
+        while (map.numberOfAllAnimals() > 0) {
+            day();
+            try {
+                Thread.sleep(300);
+            } catch (InterruptedException e) {
+                return;
+            }
+        }
     }
 
 

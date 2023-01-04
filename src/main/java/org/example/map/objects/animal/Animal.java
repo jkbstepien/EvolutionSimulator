@@ -76,13 +76,20 @@ public class Animal implements IMapElement {
         }
     }
 
-    public void move(){
-        Vector2d oldPosition = position;
-        this.position = position.add(direction.toUnitVector());
+    public void move(Vector2d newPosition){
+        Vector2d oldPosition = this.position;
+        this.position = newPosition;
+
         for(IAnimalObserver observer: observers){
             observer.animalMoved(this, oldPosition);
         }
         age++;
+    }
+
+    public Vector2d getNewPosition(){
+        int nextGene = genotype.getMoveDirection();
+        MapDirection direction = MapDirection.fromInt(nextGene);
+        return position.add(direction.toUnitVector());
     }
 
     public void changeOrientation(){

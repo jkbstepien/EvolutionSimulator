@@ -43,4 +43,9 @@ public class Plant {
             observer.plantPlaced(this);
         }
     }
+
+    @Override
+    public String toString() {
+        return "*";
+    }
 }

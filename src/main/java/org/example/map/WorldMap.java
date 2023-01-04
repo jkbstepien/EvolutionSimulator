@@ -15,13 +15,14 @@ import org.example.utils.Vector2d;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class WorldMap implements IAnimalObserver, IPlantObserver {
     // Map parameters
     private final int width;
     private final int height;
     private final IEdge iEdge;
+    private final Vector2d lowerLeft;
+    private final Vector2d upperRight;
 
     // Plants parameters
     private final int numberOfPlantsAtStart;
@@ -42,6 +43,10 @@ public class WorldMap implements IAnimalObserver, IPlantObserver {
     private final List<Animal> deadAnimals = new LinkedList<>();
     private final Random generator = new Random();
 
+    private int numberOfAnimals = 0;
+
+    private List<Animal> animalList = new ArrayList<>();
+
     public WorldMap(int width,
                     int height,
                     IEdge iEdge,
@@ -57,6 +62,8 @@ public class WorldMap implements IAnimalObserver, IPlantObserver {
         this.width = width;
         this.height = height;
         this.iEdge = iEdge;
+        this.lowerLeft = new Vector2d(0, 0);
+        this.upperRight = new Vector2d(width - 1, height - 1);
         this.numberOfPlantsAtStart = numberOfPlantsAtStart;
         this.plantEnergy = plantEnergy;
         this.plantsSeededEachDay = plantsSeededEachDay;
@@ -76,6 +83,14 @@ public class WorldMap implements IAnimalObserver, IPlantObserver {
 
     public int getHeight() {
         return height;
+    }
+
+    public Vector2d getLowerLeft() {
+        return lowerLeft;
+    }
+
+    public Vector2d getUpperRight() {
+        return upperRight;
     }
 
     private Vector2d plantPosition(){
@@ -112,7 +127,7 @@ public class WorldMap implements IAnimalObserver, IPlantObserver {
             x = generator.nextInt(width);
             y = generator.nextInt(height);
             position = new Vector2d(x, y);
-        }while(animals.get(position).size() > 0);
+        }while(animals.getOrDefault(position, Collections.emptyList()).size() > 0);
         return position;
     }
 
@@ -142,6 +157,8 @@ public class WorldMap implements IAnimalObserver, IPlantObserver {
         } else{
             animals.put(position, new LinkedList<>(List.of(animal)));
         }
+        numberOfAnimals++;
+        animalList.add(animal);
     }
 
     @Override
@@ -157,6 +174,8 @@ public class WorldMap implements IAnimalObserver, IPlantObserver {
     public void animalDied(Animal animal) {
         animals.get(animal.getPosition()).remove(animal);
         deadAnimals.add(animal);
+        animalList.remove(animal);
+        numberOfAnimals--;
     }
 
     @Override
@@ -210,10 +229,7 @@ public class WorldMap implements IAnimalObserver, IPlantObserver {
     }
 
     public int numberOfAllAnimals(){
-        return animals.values()
-                .stream()
-                .mapToInt(List::size)
-                .sum();
+        return numberOfAnimals;
     }
 
     public int numberOfAllPlants(){
@@ -260,4 +276,22 @@ public class WorldMap implements IAnimalObserver, IPlantObserver {
         return (average.isPresent() ? average.getAsDouble() : 0);
     }
 
+    public void moveAllAnimals(){
+        animalList.forEach(this::moveAnimal);
+    }
+
+    private void moveAnimal(Animal animal){
+        Vector2d position = iEdge.handleMove(animal);
+        animal.move(position);
+    }
+
+    public String contentLabel(Vector2d position){
+        if(animals.containsKey(position) && !animals.get(position).isEmpty()){
+            return animals.get(position).get(0).toString();
+        }
+        if(plants.containsKey(position)){
+            return plants.get(position).toString();
+        }
+        return " ";
+    }
 }

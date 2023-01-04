@@ -7,7 +7,7 @@ import java.util.*;
 public abstract class Genes {
 
     protected final Random randomGenerator = new Random();
-    protected final List<Integer> genotype;
+    protected List<Integer> genotype;
     protected int currentGene;
     protected final IAnimalBehavior makeMove;
     protected final int genesLength;
@@ -18,7 +18,7 @@ public abstract class Genes {
     private List<Integer> randomGenotype(){
         List<Integer> newGenotype = new ArrayList<>();
         for (int i = 0; i < genesLength; i++) {
-            genotype.add(randomGenerator.nextInt(differentGenes));
+            newGenotype.add(randomGenerator.nextInt(differentGenes));
         }
         return newGenotype;
     }

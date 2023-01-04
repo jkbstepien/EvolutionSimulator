@@ -4,22 +4,15 @@ import javafx.application.Platform;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.example.map.WorldMap;
 import org.example.utils.Preferences;
 import org.example.utils.Vector2d;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 
 
 public class SimulationStage extends Stage implements IEngineRefreshObserver {
@@ -45,23 +38,23 @@ public class SimulationStage extends Stage implements IEngineRefreshObserver {
         map = preferences.toWorldMap();
 
         setOnCloseRequest(e -> {
-            if (engineThread == null) return;
-            engineThread.interrupt();
+            if (engine != null) {
+                engine.interrupt();
+            }
         });
 
+        Button startSimulationButton = new Button("Play");
+        startSimulationButton.setOnMouseClicked(event -> {
+            if (engine != null && engine.isAlive()) {
+                engine.interrupt();
+                startSimulationButton.setText("Play");
+            } else {
+                engine = new SimulationEngine(map, this);
+                engine.start();
+                startSimulationButton.setText("Pause");
+            }
 
-//        Button startSimulationButton = new Button("Play");
-//        startSimulationButton.setOnMouseClicked(event -> {
-//            if (engineThread != null && engineThread.isAlive()) {
-//                engineThread.interrupt();
-//                startSimulationButton.setText("Play");
-//            } else {
-//                engineThread = new Thread(engine);
-//                engineThread.start();
-//                startSimulationButton.setText("Pause");
-//            }
-//
-//        });
+        });
 //
 //        Button saveToFileButton = new Button();
 //        saveToFileButton.setText("save to file");
@@ -84,11 +77,11 @@ public class SimulationStage extends Stage implements IEngineRefreshObserver {
 //        });
 //
 //
-//        HBox main = new HBox();
-//        VBox right = new VBox();
-//        right.getChildren().addAll(startSimulationButton, dominantGenotype, saveToFileButton);
-//        main.getChildren().addAll(gridPane, right);
-//        layout.getChildren().add(main);
+        HBox main = new HBox();
+        VBox right = new VBox();
+        right.getChildren().addAll(startSimulationButton);
+        main.getChildren().addAll(gridPane, right);
+        layout.getChildren().add(main);
 //
 //        HBox charts = new HBox();
 //
@@ -110,107 +103,75 @@ public class SimulationStage extends Stage implements IEngineRefreshObserver {
 //        layout.getChildren().add(charts);
 //
 //
-//        engine = new SimulationEngine(map, magic);
-//        engine.addEngineObserver(this);
-
+        engine = new SimulationEngine(map, this);
+        displayMap();
+        engine.start();
         setScene(scene);
         show();
     }
 
+    private String nameMapLabels(Vector2d lowerLeft,
+                                 Vector2d upperRight, int borderMargin,
+                                 int x_position, int y_position) {
 
-    private XYChart<Number, Number> createLineChart(String title, String yTitle, XYChart.Series<Number, Number> dataSeries) {
-        final NumberAxis xAxis = new NumberAxis();
-        final NumberAxis yAxis = new NumberAxis();
-        final LineChart<Number, Number> chart = new LineChart<>(xAxis, yAxis);
-        xAxis.setLabel("Day");
-        xAxis.setForceZeroInRange(false);
-        yAxis.setLabel(yTitle);
-        chart.setLegendVisible(false);
-        chart.setTitle(title);
-        chart.setCreateSymbols(false);
-        chart.setAnimated(false);
+        int mapBorderX = lowerLeft.x + x_position - borderMargin;
+        int mapBorderY = upperRight.y - y_position + borderMargin;
 
-        chart.getData().add(dataSeries);
-
-        return chart;
+        if (x_position == 0 && y_position == 0) {
+            return "y/x";
+        } else if (x_position == 0) {
+            return Integer.toString(mapBorderY);
+        } else if (y_position == 0) {
+            return Integer.toString(mapBorderX);
+        } else {
+            Vector2d position = new Vector2d(mapBorderX, mapBorderY);
+            return map.contentLabel(position);
+        }
     }
 
-//    private String nameMapLabels(IWorldMap worldMap, Vector2d lowerLeft,
-//                                 Vector2d upperRight, int borderMargin,
-//                                 int x_position, int y_position) {
-//
-//        int mapBorderX = lowerLeft.x + x_position - borderMargin;
-//        int mapBorderY = upperRight.y - y_position + borderMargin;
-//
-//        if (x_position == 0 && y_position == 0) {
-//            return "y/x";
-//        } else if (x_position == 0) {
-//            return Integer.toString(mapBorderY);
-//        } else if (y_position == 0) {
-//            return Integer.toString(mapBorderX);
-//        } else {
-//            Object objectOnMap = worldMap.objectAt(new Vector2d(mapBorderX, mapBorderY));
-//
-//            if (objectOnMap == null) {
-//                return " ";
-//            } else {
-//                return objectOnMap.toString();
-//            }
-//        }
-//    }
+    public void displayMap() {
+        gridPane.setGridLinesVisible(false);
+        gridPane.getColumnConstraints().clear();
+        gridPane.getRowConstraints().clear();
+        gridPane.getChildren().clear();
+        gridPane.setGridLinesVisible(true);
 
-//    private void displayMap(IWorldMap worldMap) {
-//        updateCharts();
-//
-//        gridPane.setGridLinesVisible(false);
-//        gridPane.getColumnConstraints().clear();
-//        gridPane.getRowConstraints().clear();
-//        gridPane.getChildren().clear();
-//        gridPane.setGridLinesVisible(true);
-//
-//        Vector2d lowerLeft = worldMap.getLowerLeft();
-//        Vector2d upperRight = worldMap.getUpperRight();
-//
-//        int borderMargin = 1;
-//        int maxValueX = upperRight.x - lowerLeft.x + borderMargin;
-//        int maxValueY = upperRight.y - lowerLeft.y + borderMargin;
-//
-//        // Add map labels to gridPane.
-//        for (int y = 0; y <= maxValueY; y++) {
-//            for (int x = 0; x <= maxValueX; x++) {
-//                int mapBorderX = lowerLeft.x + x - borderMargin;
-//                int mapBorderY = upperRight.y - y + borderMargin;
-//                Vector2d pos = new Vector2d(mapBorderX, mapBorderY);
-//                StackPane cell = new StackPane();
-//                if (x != 0 && y != 0) {
-//                    cell.setBackground(new Background(new BackgroundFill(Color.GREEN, CornerRadii.EMPTY, Insets.EMPTY)));
-//                }
-//                if (pos.follows(map.getJungleLowerLeft()) && pos.precedes(map.getJungleUpperRight())) {
-//                    cell.setBackground(new Background(new BackgroundFill(Color.DARKGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
-//                }
-//
-//                String name = nameMapLabels(worldMap, lowerLeft, upperRight, borderMargin, x, y);
-//                if (worldMap.objectAt(pos) instanceof Plant) {
-//                    var guiElement = new GuiElementBox((IMapElement) worldMap.objectAt(new Vector2d(mapBorderX, mapBorderY)));
-//                    cell.getChildren().add(guiElement.getGuiVisualization());
-//                } else {
-//                    Label label = new Label(name);
-//                    cell.getChildren().add(label);
-//                }
-//                gridPane.add(cell, x, y, 1, 1);
-//                GridPane.setHalignment(cell, HPos.CENTER);
-//            }
-//        }
-//
-//        // Format gridPane as well as set constraints on columns and rows.
-//        for (int y = 0; y <= maxValueY; y++) {
-//            gridPane.getRowConstraints().add(new RowConstraints(this.mapHeight));
-//        }
-//
-//        for (int x = 0; x <= maxValueX; x++) {
-//            gridPane.getColumnConstraints().add(new ColumnConstraints(this.mapWidth));
-//        }
-//    }
+        Vector2d lowerLeft = map.getLowerLeft();
+        Vector2d upperRight = map.getUpperRight();
+
+        int borderMargin = 1;
+        int maxValueX = upperRight.x - lowerLeft.x + borderMargin;
+        int maxValueY = upperRight.y - lowerLeft.y + borderMargin;
+
+        // Add map labels to gridPane.
+        for (int y = 0; y <= maxValueY; y++) {
+            for (int x = 0; x <= maxValueX; x++) {
+                int mapBorderX = lowerLeft.x + x - borderMargin;
+                int mapBorderY = upperRight.y - y + borderMargin;
+                Vector2d pos = new Vector2d(mapBorderX, mapBorderY);
+                StackPane cell = new StackPane();
+                if (x != 0 && y != 0) {
+                    cell.setBackground(new Background(new BackgroundFill(Color.GREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+                }
+
+                String name = nameMapLabels(lowerLeft, upperRight, borderMargin, x, y);
+                Label label = new Label(name);
+                cell.getChildren().add(label);
+
+                gridPane.add(cell, x, y, 1, 1);
+                GridPane.setHalignment(cell, HPos.CENTER);
+            }
+        }
+
+        // Format gridPane as well as set constraints on columns and rows.
+        for (int y = 0; y <= maxValueY; y++) {
+            gridPane.getRowConstraints().add(new RowConstraints(this.mapHeight));
+        }
+
+        for (int x = 0; x <= maxValueX; x++) {
+            gridPane.getColumnConstraints().add(new ColumnConstraints(this.mapWidth));
+        }
+    }
 
 //    private void updateCharts() {
 //        averageLifespan.getData().add(new XYChart.Data<>(engine.getDayCounter(), map.getLifespanAverage()));
@@ -224,7 +185,7 @@ public class SimulationStage extends Stage implements IEngineRefreshObserver {
 
     @Override
     public void refreshNeeded() {
-//        Platform.runLater(() -> displayMap(map));
+        Platform.runLater(this::displayMap);
     }
 
 //    private void saveStatisticsToFile(File file) {

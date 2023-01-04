@@ -15,7 +15,8 @@ public class EdgeEarth implements IEdge {
     }
 
     @Override
-    public Vector2d handleMove(Vector2d position, Animal animal) {
+    public Vector2d handleMove(Animal animal) {
+        Vector2d position = animal.getNewPosition();
         if (position.follows(lowerLeft) && position.precedes(upperRight)) {
             return position;
         } else {
