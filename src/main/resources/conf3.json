@@ -1,6 +1,6 @@
 {
-  "width": 50,
-  "height": 50,
+  "width": 10,
+  "height": 10,
   "iEdge": "earth",
   "numberOfPlantsAtStart": 20,
   "plantEnergy": 50,
@@ -12,7 +12,7 @@
   "animalBreedingCost": 50,
   "animalMinMutations": 2,
   "animalMaxMutations": 5,
-  "genesLength": 32,
+  "genesLength": 2,
   "isCrazyBehavior": false,
   "isFullRandom": false
 }

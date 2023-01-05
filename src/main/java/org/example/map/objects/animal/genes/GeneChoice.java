@@ -9,9 +9,11 @@ public class GeneChoice {
 
     private final List<Integer> indexes = new ArrayList<>();
     private final Random randomGenerator = new Random();
+    private final int genesLength;
 
     public GeneChoice(int genesLength){
-        for(int i=0; i<genesLength; i++){
+        this.genesLength = genesLength;
+        for(int i = 0; i< genesLength; i++){
             indexes.add(i);
         }
     }
@@ -19,6 +21,11 @@ public class GeneChoice {
     public Integer next(){
         Integer chosenIndex = indexes.get(randomGenerator.nextInt(indexes.size()));
         indexes.remove(chosenIndex);
+        if (indexes.size() == 0){
+            for(int i=0; i<genesLength; i++){
+                indexes.add(i);
+            }
+        }
         return chosenIndex;
     }
 
