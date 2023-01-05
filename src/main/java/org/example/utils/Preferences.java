@@ -49,7 +49,7 @@ public record Preferences(
         }
         IEdge iEdgeImplementation;
         if (iEdge.equals("earth")) {
-            iEdgeImplementation = new EdgeEarth(new Vector2d(0, 0), new Vector2d(width-1, height-1));
+            iEdgeImplementation = new EdgeEarth(new Vector2d(0, 0), new Vector2d(width-1, height-1), width, height);
         } else {
             iEdgeImplementation = new EdgeHellPortal(new Vector2d(0, 0), new Vector2d(width-1, height-1));
         }

@@ -12,6 +12,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.example.map.Statistics;
 import org.example.map.WorldMap;
+import org.example.map.objects.animal.Animal;
 import org.example.utils.Preferences;
 import org.example.utils.Vector2d;
 
@@ -170,6 +171,16 @@ public class SimulationStage extends Stage implements IEngineRefreshObserver {
                 GridPane.setHalignment(cell, HPos.CENTER);
             }
         }
+
+        map.animalsWithDominantGenes().stream().map(Animal::getPosition).forEach(position -> {
+            StackPane cell = new StackPane();
+            cell.setBackground(new Background(new BackgroundFill(Color.YELLOW, CornerRadii.EMPTY, Insets.EMPTY)));
+            String name = nameMapLabels(lowerLeft, upperRight, borderMargin, position.x+1, map.getHeight() - position.y);
+            Label label = new Label(name);
+            cell.getChildren().add(label);
+            gridPane.add(cell, position.x+1, map.getHeight() - position.y, 1, 1);
+            GridPane.setHalignment(cell, HPos.CENTER);
+        });
 
         // Format gridPane as well as set constraints on columns and rows.
         for (int y = 0; y <= maxValueY; y++) {

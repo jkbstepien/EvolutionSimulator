@@ -328,4 +328,11 @@ public class WorldMap implements IAnimalObserver, IPlantObserver {
     public List<Statistics> getAllStatistics(){
         return statistics;
     }
+
+    public List<Animal> animalsWithDominantGenes() {
+        List<Genes> mostPopularGenotypes = mostPopularGenotypes();
+        return animalList.stream()
+                .filter(animal -> mostPopularGenotypes.contains(animal.getGenotype()))
+                .toList();
+    }
 }
