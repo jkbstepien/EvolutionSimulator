@@ -13,4 +13,6 @@ public class GetFromFile {
         preferences = mapper.readValue(new File(filename), Preferences.class);
         return preferences;
     }
+
+
 }
