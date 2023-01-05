@@ -4,16 +4,20 @@ import javafx.application.Platform;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.example.map.Statistics;
 import org.example.map.WorldMap;
 import org.example.utils.Preferences;
 import org.example.utils.Vector2d;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 
 public class SimulationStage extends Stage implements IEngineRefreshObserver {
@@ -21,19 +25,20 @@ public class SimulationStage extends Stage implements IEngineRefreshObserver {
     private final VBox layout = new VBox();
     private final Scene scene = new Scene(layout, 1280, 720);
     private final Label dominantGenotype = new Label();
+    private final Button saveToFileButton = new Button("save to file");;
     int mapHeight = 50;
     int mapWidth = 50;
     WorldMap map;
 
     SimulationEngine engine;
     Thread engineThread;
-    private Label numberOfLivingAnimals = new Label("");
-    private Label numberOfPlants = new Label("");
-    private Label numberOfFreeFields = new Label("");
-    private Label mostPopularGenotype = new Label("");
-    private Label averageEnergy = new Label("");
-    private Label averageLifespan = new Label("");
-    private Label day = new Label("");
+    private final Label numberOfLivingAnimals = new Label("");
+    private final Label numberOfPlants = new Label("");
+    private final Label numberOfFreeFields = new Label("");
+    private final Label mostPopularGenotype = new Label("");
+    private final Label averageEnergy = new Label("");
+    private final Label averageLifespan = new Label("");
+    private final Label day = new Label("");
 
     public SimulationStage(Preferences preferences) {
         map = preferences.toWorldMap();
@@ -48,71 +53,53 @@ public class SimulationStage extends Stage implements IEngineRefreshObserver {
         startSimulationButton.setOnMouseClicked(event -> {
             if (engine != null && engine.isAlive()) {
                 engine.interrupt();
+                saveToFileButton.setDisable(false);
                 startSimulationButton.setText("Play");
             } else {
                 engine = new SimulationEngine(map, this);
                 engine.start();
+                saveToFileButton.setDisable(true);
                 startSimulationButton.setText("Pause");
             }
 
         });
-//
-//        Button saveToFileButton = new Button();
-//        saveToFileButton.setText("save to file");
-//        saveToFileButton.setOnAction(event -> {
-//            FileChooser fileChooser = new FileChooser();
-//
-//            //Set extension filter for csv files
-//            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv");
-//            fileChooser.getExtensionFilters().add(extFilter);
-//
-//            //Show save file dialog
-//            File file = fileChooser.showSaveDialog(this);
-//
-//            if (file != null) {
-//                if (!file.getName().endsWith(".csv")) {
-//                    file = new File(file.getAbsolutePath() + ".csv");
-//                }
-//                saveStatisticsToFile(file);
-//            }
-//        });
+        saveToFileButton.setDisable(true);
+        saveToFileButton.setOnAction(event -> {
+            FileChooser fileChooser = new FileChooser();
+
+            //Set extension filter for csv files
+            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv");
+            fileChooser.getExtensionFilters().add(extFilter);
+
+            //Show save file dialog
+            File file = fileChooser.showSaveDialog(this);
+
+            if (file != null) {
+                if (!file.getName().endsWith(".csv")) {
+                    file = new File(file.getAbsolutePath() + ".csv");
+                }
+                saveStatisticsToFile(file);
+            }
+        });
 //
 //
         HBox main = new HBox();
+        main.setPadding(new Insets(10, 10, 10, 10));
         VBox right = new VBox();
         right.setSpacing(10);
         right.setPadding(new Insets(10, 10, 10, 10));
         right.getChildren().addAll(startSimulationButton,
-          numberOfLivingAnimals,
-          numberOfPlants,
-          numberOfFreeFields,
-          mostPopularGenotype,
-          averageEnergy,
-          averageLifespan,
-          day);
+                numberOfLivingAnimals,
+                numberOfPlants,
+                numberOfFreeFields,
+                mostPopularGenotype,
+                averageEnergy,
+                averageLifespan,
+                day,
+                saveToFileButton);
         main.getChildren().addAll(gridPane, right);
         layout.getChildren().add(main);
-//
-//        HBox charts = new HBox();
-//
-//        var numberOfLivingAnimals = createLineChart("Animals number",
-//                "Number of animals", this.numberOfLivingAnimals);
-//        var numberOfPlants = createLineChart("Plants number",
-//                "Number of plants", this.numberOfPlants);
-//        var averageEnergy = createLineChart("Average animal energy",
-//                "Energy", this.averageEnergy);
-//        var averageLifespan = createLineChart("Average animal lifespan",
-//                "Day", this.averageLifespan);
-//        var averageKidsPerParent = createLineChart("Average kids per parent animal",
-//                "Kids", this.averageKidsPerParent);
-//
-//
-//        charts.getChildren().addAll(numberOfLivingAnimals, numberOfPlants, averageEnergy,
-//                averageLifespan, averageKidsPerParent);
-//
-//        layout.getChildren().add(charts);
-//
-//
+
         engine = new SimulationEngine(map, this);
         displayMap();
         engine.start();
@@ -194,68 +181,28 @@ public class SimulationStage extends Stage implements IEngineRefreshObserver {
         }
     }
 
-//    private void updateCharts() {
-//        averageLifespan.getData().add(new XYChart.Data<>(engine.getDayCounter(), map.getLifespanAverage()));
-//        numberOfLivingAnimals.getData().add(new XYChart.Data<>(engine.getDayCounter(), map.countAnimals()));
-//        numberOfPlants.getData().add(new XYChart.Data<>(engine.getDayCounter(), map.countPlants()));
-//        averageEnergy.getData().add(new XYChart.Data<>(engine.getDayCounter(), map.getEnergyAverage()));
-//        averageKidsPerParent.getData().add(new XYChart.Data<>(engine.getDayCounter(), map.getKidsPerLivingParentAverage()));
-//
-//        dominantGenotype.setText("Dominant genotype:\t" + map.getDominatingGenotype());
-//    }
-
     @Override
     public void refreshNeeded() {
         Platform.runLater(this::displayMap);
     }
 
-//    private void saveStatisticsToFile(File file) {
-//        try {
-//            FileWriter out = new FileWriter(file);
-//
-//            out.append("Day number");
-//            out.append(',');
-//            out.append("Alive animals");
-//            out.append(',');
-//            out.append("Plants");
-//            out.append(',');
-//            out.append("Average (alive)");
-//            out.append(',');
-//            out.append("Average lifespan (dead animals)");
-//            out.append(',');
-//            out.append("Average number of children (alive animals)");
-//            out.append('\n');
-//
-//            for (int i = 0; i < engine.getDayCounter(); i++) {
-//                out.append(String.valueOf(i));
-//                out.append(',');
-//                out.append(String.valueOf(numberOfLivingAnimals.getData().get(i).getYValue()));
-//                out.append(',');
-//                out.append(String.valueOf(numberOfPlants.getData().get(i).getYValue()));
-//                out.append(',');
-//                out.append(String.valueOf(averageEnergy.getData().get(i).getYValue()));
-//                out.append(',');
-//                out.append(String.valueOf(averageLifespan.getData().get(i).getYValue()));
-//                out.append(',');
-//                out.append(String.valueOf(averageKidsPerParent.getData().get(i).getYValue()));
-//                out.append('\n');
-//            }
-//
-//            out.append("Average statistics,");
-//            out.append(String.valueOf(numberOfLivingAnimals.getData().stream().mapToDouble(a -> a.getYValue().doubleValue()).average().orElse(0)));
-//            out.append(',');
-//            out.append(String.valueOf(numberOfPlants.getData().stream().mapToDouble(a -> a.getYValue().doubleValue()).average().orElse(0)));
-//            out.append(',');
-//            out.append(String.valueOf(averageEnergy.getData().stream().mapToDouble(a -> a.getYValue().doubleValue()).average().orElse(0)));
-//            out.append(',');
-//            out.append(String.valueOf(averageLifespan.getData().stream().mapToDouble(a -> a.getYValue().doubleValue()).average().orElse(0)));
-//            out.append(',');
-//            out.append(String.valueOf(averageKidsPerParent.getData().stream().mapToDouble(a -> a.getYValue().doubleValue()).average().orElse(0)));
-//
-//            out.flush();
-//            out.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    private void saveStatisticsToFile(File file) {
+        try {
+            FileWriter out = new FileWriter(file);
+            out.append(Statistics.csvHeader());
+
+            map.getAllStatistics().forEach(statistics -> {
+                try {
+                    out.append(statistics.toCsvRow());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+
+            out.flush();
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

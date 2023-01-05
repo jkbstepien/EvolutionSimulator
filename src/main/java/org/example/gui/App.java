@@ -1,6 +1,7 @@
 package org.example.gui;
 
 import javafx.application.Application;
+import javafx.geometry.HPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -25,6 +26,11 @@ public class App extends Application {
         Button startSimulationButton1 = getButton("src/main/resources/conf1.json", 1);
         Button startSimulationButton2 = getButton("src/main/resources/conf2.json", 2);
         Button startSimulationButton3 = getButton("src/main/resources/conf3.json", 3);
+
+        // Position buttons at center.
+        GridPane.setHalignment(startSimulationButton1, HPos.CENTER);
+        GridPane.setHalignment(startSimulationButton2, HPos.CENTER);
+        GridPane.setHalignment(startSimulationButton3, HPos.CENTER);
 
         layout.addRow(1, startSimulationButton1);
         layout.addRow(2, startSimulationButton2);
@@ -58,6 +64,7 @@ public class App extends Application {
     private void customPath(GridPane layout) {
 
         Button button = new Button("Read simulation from file");
+        GridPane.setHalignment(button, HPos.CENTER);
         button.setOnMouseClicked(event -> {
             Preferences preferences = null;
             try {

@@ -324,4 +324,8 @@ public class WorldMap implements IAnimalObserver, IPlantObserver {
         statistics.add(currentStats);
         return currentStats;
     }
+
+    public List<Statistics> getAllStatistics(){
+        return statistics;
+    }
 }

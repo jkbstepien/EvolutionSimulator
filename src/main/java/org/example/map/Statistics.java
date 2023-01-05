@@ -12,4 +12,19 @@ public record Statistics(
         double averageEnergy,
         double averageDeadLifespan,
         int dayCounter) {
+
+    public String toCsvRow() {
+        return String.format("%d,%d,%d,%s,%f,%f,%d\n",
+                numberOfAllAnimals,
+                numberOfAllPlants,
+                freeField,
+                mostPopularGenotypes,
+                averageEnergy,
+                averageDeadLifespan,
+                dayCounter);
+    }
+
+    public static String csvHeader() {
+        return "numberOfAllAnimals,numberOfAllPlants,freeField,mostPopularGenotypes,averageEnergy,averageDeadLifespan,dayCounter\n";
+    }
 }
