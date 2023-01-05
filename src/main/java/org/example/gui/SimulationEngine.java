@@ -39,6 +39,7 @@ public class SimulationEngine extends Thread {
 
     private void day() {
         dayCounter++;
+        this.map.removeDeadAnimals();
         this.map.moveAllAnimals();
         this.map.eatPlants();
         this.map.breeding();
@@ -55,7 +56,8 @@ public class SimulationEngine extends Thread {
     }
     @Override
     public void run() {
-        while (map.numberOfAllAnimals() > 0) {
+//        while (map.numberOfAllAnimals() > 0) {
+        while(true){
             day();
             try {
                 Thread.sleep(300);

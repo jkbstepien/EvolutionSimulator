@@ -111,7 +111,8 @@ public class WorldMap implements IAnimalObserver, IPlantObserver {
             plant.addObserver((IPlantObserver) iPlants);
             plant.place();
         }
-        catch(IllegalArgumentException ignored){}
+        catch(IllegalArgumentException ignored){
+        }
     }
 
     private void placePlants(){
@@ -150,7 +151,7 @@ public class WorldMap implements IAnimalObserver, IPlantObserver {
 
 
     @Override
-    public void animalPlaced(Animal animal) {
+    public synchronized void animalPlaced(Animal animal) {
         Vector2d position = animal.getPosition();
         if(animals.containsKey(position)){
             animals.get(position).add(animal);
@@ -162,7 +163,7 @@ public class WorldMap implements IAnimalObserver, IPlantObserver {
     }
 
     @Override
-    public void animalMoved(Animal animal, Vector2d oldPosition) {
+    public synchronized void animalMoved(Animal animal, Vector2d oldPosition) {
         animals.get(oldPosition).remove(animal);
 
         List<Animal> animalsAtNewPosition = animals
@@ -171,7 +172,7 @@ public class WorldMap implements IAnimalObserver, IPlantObserver {
     }
 
     @Override
-    public void animalDied(Animal animal) {
+    public synchronized void animalDied(Animal animal) {
         animals.get(animal.getPosition()).remove(animal);
         deadAnimals.add(animal);
         animalList.remove(animal);
@@ -179,13 +180,18 @@ public class WorldMap implements IAnimalObserver, IPlantObserver {
     }
 
     @Override
-    public void plantEaten(Plant plant){
-        plants.remove(plant);
+    public synchronized void plantEaten(Plant plant){
+        plants.remove(plant.getPosition());
     }
 
     @Override
-    public void plantPlaced(Plant plant){
+    public synchronized void plantPlaced(Plant plant){
         plants.put(plant.getPosition(), plant);
+    }
+
+    public void removeDeadAnimals(){
+        List<Animal> animalsIterator = new ArrayList<>(animalList);
+        animalsIterator.forEach(Animal::removeIfDied);
     }
 
     public void eatPlants() {

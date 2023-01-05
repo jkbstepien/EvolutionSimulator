@@ -13,7 +13,7 @@ public class ByDeathsComparator implements Comparator<Vector2d> {
     }
 
     @Override
-    public int compare(Vector2d a, Vector2d b){
+    public synchronized int compare(Vector2d a, Vector2d b){
         long result = deaths.get(a) - deaths.get(b);
         if(result > 0) {
             return 1;

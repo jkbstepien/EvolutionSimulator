@@ -84,6 +84,7 @@ public class Animal implements IMapElement {
             observer.animalMoved(this, oldPosition);
         }
         age++;
+        energy--;
     }
 
     public Vector2d getNewPosition(){

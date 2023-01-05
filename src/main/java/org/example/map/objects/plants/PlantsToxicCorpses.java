@@ -26,18 +26,18 @@ public class PlantsToxicCorpses implements IPlants, IAnimalObserver, IPlantObser
     }
 
     @Override
-    public void animalPlaced(Animal animal){
+    public synchronized void animalPlaced(Animal animal){
 
     }
 
     @Override
-    public void animalMoved(Animal animal, Vector2d oldPosition){
+    public synchronized void animalMoved(Animal animal, Vector2d oldPosition){
     }
 
     @Override
-    public void animalDied(Animal animal){
+    public synchronized void animalDied(Animal animal){
         Vector2d position = animal.getPosition();
-        if(!gravesSorted.contains(position)){
+        if(!deathsCounted.containsKey(position)){
             deathsCounted.put(position, 1);
             gravesSorted.add(position);
         }
@@ -50,12 +50,12 @@ public class PlantsToxicCorpses implements IPlants, IAnimalObserver, IPlantObser
     }
 
     @Override
-    public void plantEaten(Plant plant){
+    public synchronized void plantEaten(Plant plant){
         plantPositions.remove(plant.getPosition());
     }
 
     @Override
-    public void plantPlaced(Plant plant){
+    public synchronized void plantPlaced(Plant plant){
         plantPositions.add(plant.getPosition());
     }
 
@@ -75,10 +75,13 @@ public class PlantsToxicCorpses implements IPlants, IAnimalObserver, IPlantObser
 
     private Vector2d placeOnNonGrave(){
         Vector2d position;
+        int i = 0;
         do{
+            System.out.println(i);
             int x = generator.nextInt(mapWidth);
             int y = generator.nextInt(mapHeight);
             position = new Vector2d(x, y);
+            i++;
         }while(deathsCounted.containsKey(position));
         return position;
     }

@@ -46,15 +46,22 @@ public class PlantsEquator implements IPlants, IPlantObserver{
         // TODO test and maybe debug
         if(mapHeight % 2 == 1){
             int middle = mapHeight / 2;
-            equatorRows = mapHeight * 2 / 5 - 1;
+            equatorRows = mapHeight / 5;
+            int rowsLeft = equatorRows;
             equatorStartRow = middle - equatorRows / 2;
-            equatorEndRow = middle + equatorRows / 2;
+            rowsLeft -= equatorRows / 2 + 1;
+            equatorEndRow = middle + rowsLeft;
         }
         else{
-            equatorRows = mapHeight * 2 / 5;
-            equatorEndRow = mapHeight / 2 - equatorRows + 1;
-            equatorStartRow = equatorEndRow - equatorRows - 2;
+            equatorRows = mapHeight / 5;
+            int rowsLeft = equatorRows;
+            equatorEndRow = mapHeight / 2 + equatorRows / 2 - 1;
+            rowsLeft -= equatorRows / 2;
+            equatorStartRow = equatorEndRow - rowsLeft;
         }
+        System.out.println(equatorStartRow);
+        System.out.println(equatorEndRow);
+        System.out.println(equatorRows);
     }
 
     private boolean isInEquator(int row){
@@ -67,16 +74,6 @@ public class PlantsEquator implements IPlants, IPlantObserver{
         calcEquator();
     }
 
-//    private int rowInsideEquator(){
-//        // TODO raise an error if not possible
-//        return equator.get(generator.nextInt(equator.size()));
-//    }
-//
-//    private int rowOutsideEquator() {
-//        // TODO raise an error if not possible
-//        return nonEquator.get(generator.nextInt(nonEquator.size()));
-//    }
-
     private boolean equatorAccessible(){
         return equator.size() < equatorRows * mapWidth;
     }
@@ -86,7 +83,7 @@ public class PlantsEquator implements IPlants, IPlantObserver{
     }
 
     private int yEquator(){
-        return generator.nextInt(equatorEndRow - equatorStartRow) + equatorStartRow;
+        return generator.nextInt(equatorEndRow - equatorStartRow + 1) + equatorStartRow;
     }
 
     private Vector2d positionInsideEquator() throws IllegalArgumentException{
@@ -94,10 +91,13 @@ public class PlantsEquator implements IPlants, IPlantObserver{
             throw new IllegalArgumentException("Can't place plant on preferred position");
         }
         Vector2d position;
+//        int i = 0;
         do{
+//            System.out.println(i);
             int y = yEquator();
             int x = xRandom();
             position = new Vector2d(x, y);
+//            i++;
         }while(equator.contains(position));
         return position;
     }
@@ -119,7 +119,10 @@ public class PlantsEquator implements IPlants, IPlantObserver{
             throw new IllegalArgumentException("Can't place plant on non-preferred position");
         }
         Vector2d position;
+//        System.out.println("outside");
+//        int i = 0;
         do{
+//            System.out.println(i);
             int x = xRandom();
             int y;
             if(generator.nextBoolean()){
@@ -129,6 +132,7 @@ public class PlantsEquator implements IPlants, IPlantObserver{
                 y = yUnderEquator();
             }
             position = new Vector2d(x, y);
+//            i++;
         }while(nonEquator.contains(position));
         return position;
     }
