@@ -37,6 +37,8 @@ public class WorldMap implements IAnimalObserver, IPlantObserver {
     private final int animalBreedingCost;
     private final GenesFactory genesFactory;
 
+    private int dayCunter = 0;
+
     // State parameters
     private final Map<Vector2d, List<Animal>> animals = new HashMap<>();
     private final Map<Vector2d, Plant> plants = new HashMap<>();
@@ -46,6 +48,8 @@ public class WorldMap implements IAnimalObserver, IPlantObserver {
     private int numberOfAnimals = 0;
 
     private List<Animal> animalList = new ArrayList<>();
+    private List<Statistics> statistics = new ArrayList<>();
+
 
     public WorldMap(int width,
                     int height,
@@ -165,6 +169,9 @@ public class WorldMap implements IAnimalObserver, IPlantObserver {
     @Override
     public synchronized void animalMoved(Animal animal, Vector2d oldPosition) {
         animals.get(oldPosition).remove(animal);
+        if(animals.get(oldPosition).isEmpty()){
+            animals.remove(oldPosition);
+        }
 
         List<Animal> animalsAtNewPosition = animals
                 .computeIfAbsent(animal.getPosition(), k -> new LinkedList<>());
@@ -174,6 +181,9 @@ public class WorldMap implements IAnimalObserver, IPlantObserver {
     @Override
     public synchronized void animalDied(Animal animal) {
         animals.get(animal.getPosition()).remove(animal);
+        if (animals.get(animal.getPosition()).isEmpty()) {
+            animals.remove(animal.getPosition());
+        }
         deadAnimals.add(animal);
         animalList.remove(animal);
         numberOfAnimals--;
@@ -234,28 +244,19 @@ public class WorldMap implements IAnimalObserver, IPlantObserver {
         }
     }
 
-    public int numberOfAllAnimals(){
-        return numberOfAnimals;
-    }
-
-    public int numberOfAllPlants(){
-        return plants.size();
-    }
 
     public int freeFields(){
-        int usedFields = numberOfAllAnimals();
+        int usedFields = animals.size();
         for(Vector2d position: plants.keySet()){
             if(!animals.containsKey(position)){
                 usedFields++;
             }
         }
-        return usedFields;
+        return width * height - usedFields;
     }
 
     public List<Genes> mostPopularGenotypes(){
-        Map<Genes, Long> genotypesCounted = animals.values()
-            .stream()
-            .flatMap(List::stream)
+        Map<Genes, Long> genotypesCounted = animalList.stream()
             .map(Animal::getGenotype)
             .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
         return genotypesCounted.keySet()
@@ -299,5 +300,28 @@ public class WorldMap implements IAnimalObserver, IPlantObserver {
             return plants.get(position).toString();
         }
         return " ";
+    }
+
+    public Statistics getStats(){
+        return new Statistics(
+                numberOfAnimals,
+                plants.size(),
+                freeFields(),
+                mostPopularGenotypes(),
+                animalList.stream().mapToInt(Animal::getEnergy).average().orElse(0),
+                deadAnimals.stream().mapToInt(Animal::getAge).average().orElse(0),
+                dayCunter);
+    }
+
+    public Statistics day(){
+        dayCunter++;
+        removeDeadAnimals();
+        moveAllAnimals();
+        eatPlants();
+        breeding();
+        growPlants();
+        Statistics currentStats = getStats();
+        statistics.add(currentStats);
+        return currentStats;
     }
 }

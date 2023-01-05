@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import org.example.map.Statistics;
 import org.example.map.WorldMap;
 import org.example.utils.Preferences;
 import org.example.utils.Vector2d;
@@ -20,19 +21,19 @@ public class SimulationStage extends Stage implements IEngineRefreshObserver {
     private final VBox layout = new VBox();
     private final Scene scene = new Scene(layout, 1280, 720);
     private final Label dominantGenotype = new Label();
-
-    private final XYChart.Series<Number, Number> averageLifespan = new XYChart.Series<>();
-    private final XYChart.Series<Number, Number> numberOfLivingAnimals = new XYChart.Series<>();
-    private final XYChart.Series<Number, Number> numberOfPlants = new XYChart.Series<>();
-    private final XYChart.Series<Number, Number> averageEnergy = new XYChart.Series<>();
-    private final XYChart.Series<Number, Number> averageKidsPerParent = new XYChart.Series<>();
-
     int mapHeight = 50;
     int mapWidth = 50;
     WorldMap map;
 
     SimulationEngine engine;
     Thread engineThread;
+    private Label numberOfLivingAnimals = new Label("");
+    private Label numberOfPlants = new Label("");
+    private Label numberOfFreeFields = new Label("");
+    private Label mostPopularGenotype = new Label("");
+    private Label averageEnergy = new Label("");
+    private Label averageLifespan = new Label("");
+    private Label day = new Label("");
 
     public SimulationStage(Preferences preferences) {
         map = preferences.toWorldMap();
@@ -79,7 +80,16 @@ public class SimulationStage extends Stage implements IEngineRefreshObserver {
 //
         HBox main = new HBox();
         VBox right = new VBox();
-        right.getChildren().addAll(startSimulationButton);
+        right.setSpacing(10);
+        right.setPadding(new Insets(10, 10, 10, 10));
+        right.getChildren().addAll(startSimulationButton,
+          numberOfLivingAnimals,
+          numberOfPlants,
+          numberOfFreeFields,
+          mostPopularGenotype,
+          averageEnergy,
+          averageLifespan,
+          day);
         main.getChildren().addAll(gridPane, right);
         layout.getChildren().add(main);
 //
@@ -127,6 +137,17 @@ public class SimulationStage extends Stage implements IEngineRefreshObserver {
             Vector2d position = new Vector2d(mapBorderX, mapBorderY);
             return map.contentLabel(position);
         }
+    }
+
+    public void displayStats(Statistics statistics) {
+        // generate labels for stats
+        numberOfLivingAnimals.setText("Number of living animals: " + statistics.numberOfAllAnimals());
+        numberOfPlants.setText("Number of plants: " + statistics.numberOfAllPlants());
+        numberOfFreeFields.setText("Number of free fields: " + statistics.freeField());
+        mostPopularGenotype.setText("Most popular genotype: " + statistics.mostPopularGenotypes());
+        averageEnergy.setText("Average energy: " + statistics.averageEnergy());
+        averageLifespan.setText("Average lifespan: " + statistics.averageDeadLifespan());
+        day.setText("Day: " + statistics.dayCounter());
     }
 
     public void displayMap() {
