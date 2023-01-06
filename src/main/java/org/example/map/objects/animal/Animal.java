@@ -11,20 +11,20 @@ import java.util.List;
 public class Animal implements IMapElement {
     private Vector2d position;
     private MapDirection direction;
-    private Genes genotype;
+    private Genes genes;
     private int energy;
 
     private int age;
 
     private final List<IAnimalObserver> observers = new ArrayList<>();
 
-    public Animal(Vector2d position, int energy, Genes genotype) {
+    public Animal(Vector2d position, int energy, Genes genes) {
         // Basic parameters.
         this.age = 0;
         this.position = position;
         this.direction = MapDirection.NORTH.randomDirection();
         this.energy = energy;
-        this.genotype = genotype;
+        this.genes = genes;
     }
 
     @Override
@@ -59,8 +59,8 @@ public class Animal implements IMapElement {
         return energy;
     }
 
-    public Genes getGenotype() {
-        return genotype;
+    public Genes getGenes() {
+        return genes;
     }
 
     public void addObserver(IAnimalObserver observer){
@@ -88,13 +88,13 @@ public class Animal implements IMapElement {
     }
 
     public Vector2d getNewPosition(){
-        int nextGene = genotype.getMoveDirection();
+        int nextGene = genes.getMoveDirection();
         MapDirection direction = MapDirection.fromInt(nextGene);
         return position.add(direction.toUnitVector());
     }
 
     public void changeOrientation(){
-        int nextGene = genotype.getMoveDirection();
+        int nextGene = genes.getMoveDirection();
         direction = MapDirection.fromInt(nextGene);
     }
 

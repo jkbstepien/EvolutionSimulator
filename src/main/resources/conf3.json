@@ -6,13 +6,13 @@
   "plantEnergy": 50,
   "plantsSeededEachDay": 6,
   "iPlants": "equator",
-  "numberOfAnimalsAtStart": 6,
+  "numberOfAnimalsAtStart": 11,
   "animalEnergy": 100,
   "animalEnergyBreedingThreshold": 50,
   "animalBreedingCost": 50,
   "animalMinMutations": 2,
   "animalMaxMutations": 5,
-  "genesLength": 2,
+  "genesLength": 1,
   "isCrazyBehavior": false,
   "isFullRandom": false
 }

@@ -9,7 +9,6 @@ import org.example.map.objects.plants.Plant;
 import org.example.map.objects.plants.PlantsToxicCorpses;
 import org.example.map.options.IEdge;
 import org.example.map.objects.plants.IPlants;
-import org.example.utils.ByCorrespondingValuesComparator;
 import org.example.utils.Vector2d;
 
 import java.util.*;
@@ -255,14 +254,20 @@ public class WorldMap implements IAnimalObserver, IPlantObserver {
         return width * height - usedFields;
     }
 
-    public List<Genes> mostPopularGenotypes(){
-        Map<Genes, Long> genotypesCounted = animalList.stream()
-            .map(Animal::getGenotype)
+    public List<List<Integer>> mostPopularGenotypes(){
+        Map<List<Integer>, Long> genotypesCounted = animalList.stream()
+            .map(Animal::getGenes)
+                .map(Genes::getGenotype)
             .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
-        return genotypesCounted.keySet()
-                .stream()
-                .sorted(new ByCorrespondingValuesComparator(genotypesCounted))
-                .toList();
+
+        int longest = genotypesCounted.values().stream()
+            .mapToInt(Long::intValue)
+            .max()
+            .orElse(0);
+        return genotypesCounted.entrySet().stream()
+            .filter(entry -> entry.getValue() == longest)
+            .map(Map.Entry::getKey)
+            .collect(Collectors.toList());
     }
 
     public double averageEnergy(){
@@ -330,9 +335,9 @@ public class WorldMap implements IAnimalObserver, IPlantObserver {
     }
 
     public List<Animal> animalsWithDominantGenes() {
-        List<Genes> mostPopularGenotypes = mostPopularGenotypes();
+        List<List<Integer>> mostPopularGenotypes = mostPopularGenotypes();
         return animalList.stream()
-                .filter(animal -> mostPopularGenotypes.contains(animal.getGenotype()))
+                .filter(animal -> mostPopularGenotypes.contains(animal.getGenes().getGenotype()))
                 .toList();
     }
 }

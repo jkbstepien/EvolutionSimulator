@@ -45,8 +45,8 @@ public class GenesFactory {
         if (isFullRandom) {
             return new GenesFullRandom(
                     makeMove,
-                    father.getGenotype(),
-                    mother.getGenotype(),
+                    father.getGenes(),
+                    mother.getGenes(),
                     father.getEnergy(),
                     mother.getEnergy(),
                     animalMinMutations,
@@ -54,8 +54,8 @@ public class GenesFactory {
         } else {
             return new GenesSlightCorrection(
                     makeMove,
-                    father.getGenotype(),
-                    mother.getGenotype(),
+                    father.getGenes(),
+                    mother.getGenes(),
                     father.getEnergy(),
                     mother.getEnergy(),
                     animalMinMutations,

@@ -139,4 +139,5 @@ public abstract class Genes {
     protected abstract Integer mutatedGene(Integer gene);
 
 
+
 }

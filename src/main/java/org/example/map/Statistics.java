@@ -8,7 +8,7 @@ public record Statistics(
         int numberOfAllAnimals,
         int numberOfAllPlants,
         int freeField,
-        List<Genes>mostPopularGenotypes,
+        List<List<Integer>>mostPopularGenotypes,
         double averageEnergy,
         double averageDeadLifespan,
         int dayCounter) {
