@@ -5,11 +5,8 @@ import org.example.map.objects.animal.AnimalStatistics;
 import org.example.map.objects.animal.IAnimalObserver;
 import org.example.map.objects.animal.genes.Genes;
 import org.example.map.objects.animal.genes.GenesFactory;
-import org.example.map.objects.plants.IPlantObserver;
-import org.example.map.objects.plants.Plant;
-import org.example.map.objects.plants.PlantsToxicCorpses;
+import org.example.map.objects.plants.*;
 import org.example.map.options.IEdge;
-import org.example.map.objects.plants.IPlants;
 import org.example.utils.Vector2d;
 
 import java.util.*;
@@ -37,7 +34,7 @@ public class WorldMap implements IAnimalObserver, IPlantObserver {
     private final int animalBreedingCost;
     private final GenesFactory genesFactory;
 
-    private int dayCunter = 0;
+    private int dayCounter = 0;
 
     // State parameters
     private final Map<Vector2d, List<Animal>> animals = new HashMap<>();
@@ -47,8 +44,8 @@ public class WorldMap implements IAnimalObserver, IPlantObserver {
 
     private int numberOfAnimals = 0;
 
-    private List<Animal> animalList = new ArrayList<>();
-    private List<Statistics> statistics = new ArrayList<>();
+    private final List<Animal> animalList = new ArrayList<>();
+    private final List<Statistics> statistics = new ArrayList<>();
 
     private Optional<Animal> trackedAnimal = Optional.empty();
 
@@ -99,12 +96,12 @@ public class WorldMap implements IAnimalObserver, IPlantObserver {
         return upperRight;
     }
 
-    private Vector2d plantPosition(){
+    private Vector2d plantPosition() throws CannotPlacePlantException {
         boolean isPreferred = generator.nextInt(5) != 4;
         try{
             return iPlants.grow(isPreferred);
         }
-        catch (IllegalArgumentException ex){
+        catch (CannotPlacePlantException ex){
             return iPlants.grow(!isPreferred);
         }
     }
@@ -117,7 +114,7 @@ public class WorldMap implements IAnimalObserver, IPlantObserver {
             plant.addObserver((IPlantObserver) iPlants);
             plant.place();
         }
-        catch(IllegalArgumentException ignored){
+        catch(CannotPlacePlantException ignored){
         }
     }
 
@@ -166,7 +163,7 @@ public class WorldMap implements IAnimalObserver, IPlantObserver {
         }
         numberOfAnimals++;
         animalList.add(animal);
-        animal.calculateAge(this.dayCunter);
+        animal.calculateAge(this.dayCounter);
     }
 
     @Override
@@ -236,8 +233,8 @@ public class WorldMap implements IAnimalObserver, IPlantObserver {
                         child.addObserver((PlantsToxicCorpses) iPlants);
                     }
                     child.place();
-                    child.setBornDay(this.dayCunter);
-                    child.calculateAge(this.dayCunter);
+                    child.setBornDay(this.dayCounter);
+                    child.calculateAge(this.dayCounter);
                 }
                 strongest.incrementChildren();
                 secondStrongest.incrementChildren();
@@ -279,21 +276,17 @@ public class WorldMap implements IAnimalObserver, IPlantObserver {
     }
 
     public double averageEnergy(){
-        OptionalDouble average = animals.values()
-                .stream()
-                .flatMap(List::stream)
-                .map(Animal::getEnergy)
-                .mapToDouble(a->a)
-                .average();
-        return average.isPresent() ? average.getAsDouble() : 0;
+        return animalList.stream()
+                .mapToInt(Animal::getEnergy)
+                .average()
+                .orElse(0);
     }
 
-    public double averageDeadsLifespan(){
-        OptionalDouble average = deadAnimals.stream()
-                .map(Animal::getAge)
-                .mapToDouble(a->a)
-                .average();
-        return (average.isPresent() ? average.getAsDouble() : 0);
+    public double averageDeadLifespan(){
+        return deadAnimals.stream()
+                .mapToInt(Animal::getAge)
+                .average()
+                .orElse(0);
     }
 
     public void moveAllAnimals(){
@@ -321,13 +314,13 @@ public class WorldMap implements IAnimalObserver, IPlantObserver {
                 plants.size(),
                 freeFields(),
                 mostPopularGenotypes(),
-                animalList.stream().mapToInt(Animal::getEnergy).average().orElse(0),
-                deadAnimals.stream().mapToInt(Animal::getAge).average().orElse(0),
-                dayCunter);
+                averageEnergy(),
+                averageDeadLifespan(),
+                dayCounter);
     }
 
     public Statistics day(){
-        dayCunter++;
+        dayCounter++;
         removeDeadAnimals();
         moveAllAnimals();
         eatPlants();

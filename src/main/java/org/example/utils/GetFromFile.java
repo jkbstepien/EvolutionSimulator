@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class GetFromFile {
-    private ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper mapper = new ObjectMapper();
     private Preferences preferences;
 
     public Preferences getPreferencesFromFile(String filename) throws IOException {

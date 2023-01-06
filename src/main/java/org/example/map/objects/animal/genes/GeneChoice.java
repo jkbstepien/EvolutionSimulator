@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Random;
 
 public class GeneChoice {
-    // a helper class to store indexes of non-mutated genes
+    /* A helper class to store indexes of non-mutated genes,
+    so we don't try to mutate already mutated ones.
+    */
 
     private final List<Integer> indexes = new ArrayList<>();
     private final Random randomGenerator = new Random();

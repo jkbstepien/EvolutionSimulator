@@ -27,7 +27,7 @@ public class SimulationStage extends Stage implements IEngineRefreshObserver {
     private final VBox layout = new VBox();
     private final Scene scene = new Scene(layout, 1280, 720);
     private final Label dominantGenotype = new Label();
-    private final Button saveToFileButton = new Button("save to file");;
+    private final Button saveToFileButton = new Button("save to file");
     int mapHeight = 50;
     int mapWidth = 50;
     WorldMap map;

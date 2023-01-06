@@ -103,11 +103,6 @@ public class Animal implements IMapElement {
         return position.add(direction.toUnitVector());
     }
 
-    public void changeOrientation() {
-        int nextGene = genes.getMoveDirection();
-        direction = MapDirection.fromInt(nextGene);
-    }
-
     public void removeIfDied() {
         if (!isAlive()) {
             for (IAnimalObserver observer : observers) {

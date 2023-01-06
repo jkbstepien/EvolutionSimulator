@@ -1,7 +1,6 @@
 package org.example.map.objects.plants;
 
 import org.example.map.objects.animal.Animal;
-import org.example.map.objects.animal.IAnimalObserver;
 import org.example.utils.Vector2d;
 
 import java.util.ArrayList;

@@ -93,11 +93,6 @@ public abstract class Genes {
         return stringBuilder.toString();
     }
 
-    public int getRandomGene() {
-        // TODO why do we need this?
-        return genotype.get(randomGenerator.nextInt(genesLength));
-    }
-
     public Integer getMoveDirection() {
         int lastGene = currentGene;
         currentGene = makeMove.nextGeneIndex(currentGene, genesLength);
@@ -123,9 +118,6 @@ public abstract class Genes {
 
     protected void mutate(int minMutations, int maxMutations) {
         // change a gene to a different one, repeat
-        // TODO ensure minMutations <= maxMutations
-        // TODO ensure minMutations >= 0
-        // TODO ensure maxMutations <= genotype.size()
         int mutations = randomGenerator.nextInt(maxMutations - minMutations) + minMutations;
         GeneChoice geneChoice = new GeneChoice(genesLength);
         for(int i = 0; i < mutations; i++) {

@@ -13,14 +13,6 @@ public class Vector2d {
         this.y = y;
     }
 
-    public static Vector2d randomVector(int minX, int maxX, int minY, int maxY){
-        Random generator = new Random();
-        int newX = generator.nextInt(maxX - minX) + minX;
-        int newY = generator.nextInt(maxY - minY) + minY;
-        return new Vector2d(newX, newY);
-
-    }
-
     public String toString() {
         return "(" + this.x + "," + this.y + ")";
     }

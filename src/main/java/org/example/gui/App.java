@@ -46,7 +46,7 @@ public class App extends Application {
     private Button getButton(String path, int number) {
         Button startSimulationButton = new Button("Go to simulation " + number);
         startSimulationButton.setOnMouseClicked(event -> {
-            Preferences preferences = null;
+            Preferences preferences;
             try {
                 preferences = getFromFile.getPreferencesFromFile(path);
             } catch (IOException e) {
@@ -66,7 +66,7 @@ public class App extends Application {
         Button button = new Button("Read simulation from file");
         GridPane.setHalignment(button, HPos.CENTER);
         button.setOnMouseClicked(event -> {
-            Preferences preferences = null;
+            Preferences preferences;
             try {
                 preferences = getFromFile.getPreferencesFromFile(textField.getText());
                 var simulationStage = new SimulationStage(preferences);

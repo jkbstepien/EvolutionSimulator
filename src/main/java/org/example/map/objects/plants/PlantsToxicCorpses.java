@@ -8,21 +8,25 @@ import java.util.*;
 
 public class PlantsToxicCorpses implements IPlants, IAnimalObserver, IPlantObserver {
 
-    private int mapWidth;
+    private final int mapWidth, mapHeight;
 
-    private int mapHeight;
+    private final Map<Vector2d, Integer> positionsUsed = new HashMap<>();
 
-    private final Set<Vector2d> plantPositions = new HashSet<>();
-
-    private final Map<Vector2d, Integer> deathsCounted = new HashMap<>();
-
-    private final SortedSet<Vector2d> gravesSorted = new TreeSet<>(new ByDeathsComparator(deathsCounted));
-
+    private final Map<Vector2d, Integer> positionsNotUsed = new HashMap<>();
     private final Random generator = new Random();
+
+    private void positionsToChoose(){
+        for(int y=0; y<mapHeight; y++){
+            for(int x=0; x<mapWidth; x++){
+                positionsNotUsed.put(new Vector2d(x, y), 0);
+            }
+        }
+    }
 
     public PlantsToxicCorpses(int mapWidth, int mapHeight){
         this.mapWidth = mapWidth;
         this.mapHeight = mapHeight;
+        positionsToChoose();
     }
 
     @Override
@@ -37,105 +41,63 @@ public class PlantsToxicCorpses implements IPlants, IAnimalObserver, IPlantObser
     @Override
     public synchronized void animalDied(Animal animal){
         Vector2d position = animal.getPosition();
-        if(!deathsCounted.containsKey(position)){
-            deathsCounted.put(position, 1);
-            gravesSorted.add(position);
+        int counter;
+        if(positionsNotUsed.containsKey(position)){
+            counter = positionsNotUsed.get(position);
+            positionsNotUsed.replace(position, counter + 1);
         }
         else{
-            Integer count = deathsCounted.get(position);
-            deathsCounted.replace(position, count + 1);
-            gravesSorted.remove(position);
-            gravesSorted.add(position);
+            counter = positionsUsed.get(position);
+            positionsUsed.replace(position, counter + 1);
         }
     }
 
     @Override
     public synchronized void plantEaten(Plant plant){
-        plantPositions.remove(plant.getPosition());
+        Vector2d position = plant.getPosition();
+        int counter = positionsUsed.get(position);
+        positionsUsed.remove(position);
+        positionsNotUsed.put(position, counter);
     }
 
     @Override
     public synchronized void plantPlaced(Plant plant){
-        plantPositions.add(plant.getPosition());
+        Vector2d position = plant.getPosition();
+        int counter = positionsNotUsed.get(position);
+        positionsNotUsed.remove(position);
+        positionsUsed.put(position, counter);
     }
 
-    private int plantsOnGraves(){
-        return Math.toIntExact(
-                plantPositions.stream()
-                .filter(deathsCounted::containsKey)
-                .count()
-        );
+    private synchronized Vector2d preferredPosition(){
+        Integer minDeaths = Collections.min(positionsNotUsed.values());
+        List<Vector2d> suitablePositions = positionsNotUsed.entrySet()
+                .stream()
+                .filter(entry-> Objects.equals(entry.getValue(), minDeaths))
+                .map(Map.Entry::getKey)
+                .toList();
+        return suitablePositions.get(generator.nextInt(suitablePositions.size()));
     }
 
-    private boolean nonGravesAccessible(){
-        int plants = plantPositions.size();
-        int deaths = deathsCounted.size();
-        return plants - plantsOnGraves() < mapWidth * mapHeight - deaths;
+    private synchronized Vector2d nonPreferredPosition(){
+        Integer minDeaths = Collections.min(positionsNotUsed.values());
+        List<Vector2d> suitablePositions = positionsNotUsed.entrySet()
+                .stream()
+                .filter(entry-> !Objects.equals(entry.getValue(), minDeaths))
+                .map(Map.Entry::getKey)
+                .toList();
+        return suitablePositions.get(generator.nextInt(suitablePositions.size()));
     }
 
-    private Vector2d placeOnNonGrave(){
-        Vector2d position;
-        int i = 0;
-        do{
-            System.out.println(i);
-            int x = generator.nextInt(mapWidth);
-            int y = generator.nextInt(mapHeight);
-            position = new Vector2d(x, y);
-            i++;
-        }while(deathsCounted.containsKey(position));
-        return position;
-    }
-
-    private Vector2d preferredOnGrave(){
-        return gravesSorted.stream()
-                            .filter(g->!plantPositions.contains(g))
-                            .findFirst()
-                            .orElse(null);
-    }
-
-    private Vector2d preferredPosition() throws IllegalArgumentException{
-        Vector2d position;
-        if(nonGravesAccessible()){
-            return placeOnNonGrave();
-        }
-        position = preferredOnGrave();
-        if(position == null){
-            throw new IllegalArgumentException("Can't place plant on preferred position");
-        }
-        return position;
-    }
-
-    private Vector2d nonPreferredOnGrave(){
-        Vector2d[] sample = gravesSorted.stream()
-                                        .filter(g->!plantPositions.contains(g))
-                                        .toArray(Vector2d[]::new);
-        return sample[generator.nextInt(sample.length)];
-    }
-
-
-    Vector2d nonPreferredPosition() throws IllegalArgumentException{
-        Vector2d position;
-        if(nonGravesAccessible()){
-            position = placeOnNonGrave();
-            if(position == null){
-                throw new IllegalArgumentException("Can't place plant on non-preferred position");
+    public Vector2d grow(boolean preferred) throws CannotPlacePlantException{
+        try {
+            if (preferred) {
+                return preferredPosition();
             }
-            return position;
+            return nonPreferredPosition();
         }
-        try{
-            return nonPreferredOnGrave();
+        catch (NoSuchElementException | IllegalArgumentException ex){
+            throw new CannotPlacePlantException("Can't place any new plants");
         }
-        catch(ArrayIndexOutOfBoundsException ex){
-            throw new IllegalArgumentException("Can't place plant on non-preferred position");
-        }
-
-    }
-
-    public Vector2d grow(boolean preferred) throws IllegalArgumentException{
-        if(preferred){
-            return preferredPosition();
-        }
-        return nonPreferredPosition();
     }
 
 }

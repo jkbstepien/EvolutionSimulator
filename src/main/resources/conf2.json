@@ -1,6 +1,6 @@
 {
   "width": 10,
-  "height": 10,
+  "height": 16,
   "iEdge": "earth",
   "numberOfPlantsAtStart": 20,
   "plantEnergy": 50,

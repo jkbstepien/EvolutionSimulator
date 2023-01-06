@@ -1,18 +1,18 @@
 {
-  "width": 50,
-  "height": 50,
+  "width": 10,
+  "height": 10,
   "iEdge": "earth",
   "numberOfPlantsAtStart": 20,
   "plantEnergy": 50,
   "plantsSeededEachDay": 6,
   "iPlants": "equator",
-  "numberOfAnimalsAtStart": 6,
+  "numberOfAnimalsAtStart": 11,
   "animalEnergy": 100,
   "animalEnergyBreedingThreshold": 50,
   "animalBreedingCost": 50,
   "animalMinMutations": 2,
   "animalMaxMutations": 5,
-  "genesLength": 32,
+  "genesLength": 1,
   "isCrazyBehavior": false,
   "isFullRandom": false
 }

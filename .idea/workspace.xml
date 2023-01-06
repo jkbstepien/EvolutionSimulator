@@ -5,17 +5,60 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c22bfa3f-df9a-4022-889a-2b89d3c8c0d0" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gradle/7.4/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/checksums/checksums.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.4/dependencies-accessors/dependencies-accessors.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/dependencies-accessors/dependencies-accessors.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.4/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.4/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/executionHistory/executionHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.4/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/fileHashes/fileHashes.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.4/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.4/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/fileHashes/resourceHashesCache.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/gui/SimulationEngine.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/gui/SimulationEngine.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/org/example/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/org/example/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/org/example/gui/App.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/org/example/gui/App.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/org/example/gui/SimulationEngine$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/org/example/gui/SimulationEngine.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/org/example/gui/SimulationEngine.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/org/example/gui/SimulationStage.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/org/example/gui/SimulationStage.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/org/example/map/EdgeEarth.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/org/example/map/EdgeEarth.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/org/example/map/WorldMap.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/org/example/map/WorldMap.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/org/example/map/objects/animal/Animal$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/org/example/map/objects/animal/Animal$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/org/example/map/objects/animal/Animal.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/org/example/map/objects/animal/Animal.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/org/example/map/objects/animal/genes/GeneChoice.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/org/example/map/objects/animal/genes/GeneChoice.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/org/example/map/objects/animal/genes/GenesFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/org/example/map/objects/animal/genes/GenesFactory.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/org/example/map/objects/plants/ByDeathsComparator.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/org/example/map/objects/plants/IPlants.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/org/example/map/objects/plants/IPlants.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/org/example/map/objects/plants/Plant.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/org/example/map/objects/plants/Plant.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/org/example/map/objects/plants/PlantsEquator.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/org/example/map/objects/plants/PlantsEquator.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/org/example/map/objects/plants/PlantsToxicCorpses.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/org/example/map/objects/plants/PlantsToxicCorpses.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/org/example/utils/Preferences.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/org/example/utils/Preferences.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/resources/main/conf1.json" beforeDir="false" afterPath="$PROJECT_DIR$/build/resources/main/conf1.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/resources/main/conf2.json" beforeDir="false" afterPath="$PROJECT_DIR$/build/resources/main/conf2.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/resources/main/conf3.json" beforeDir="false" afterPath="$PROJECT_DIR$/build/resources/main/conf3.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/gui/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/gui/App.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/gui/IEngineRefreshObserver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/gui/IEngineRefreshObserver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/gui/SimulationStage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/gui/SimulationStage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/map/EdgeEarth.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/map/EdgeEarth.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/map/WorldMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/map/WorldMap.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/map/objects/animal/Animal.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/map/objects/animal/Animal.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/map/objects/plants/ByDeathsComparator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/map/objects/plants/ByDeathsComparator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/map/objects/animal/IAnimalObserver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/map/objects/animal/IAnimalObserver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/map/objects/animal/genes/GeneChoice.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/map/objects/animal/genes/GeneChoice.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/map/objects/animal/genes/Genes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/map/objects/animal/genes/Genes.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/map/objects/animal/genes/GenesSlightCorrection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/map/objects/animal/genes/GenesSlightCorrection.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/map/objects/plants/ByDeathsComparator.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/map/objects/plants/IPlantObserver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/map/objects/plants/IPlantObserver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/map/objects/plants/IPlants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/map/objects/plants/IPlants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/map/objects/plants/Plant.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/map/objects/plants/Plant.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/map/objects/plants/PlantsEquator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/map/objects/plants/PlantsEquator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/map/objects/plants/PlantsToxicCorpses.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/map/objects/plants/PlantsToxicCorpses.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/conf1.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/conf1.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/map/options/IMapElement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/map/options/IMapElement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/utils/ByCorrespondingValuesComparator.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/utils/GetFromFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/utils/GetFromFile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/utils/MutationOption.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/utils/MutationOption.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/utils/Preferences.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/utils/Preferences.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/utils/Vector2d.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/utils/Vector2d.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/conf2.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/conf2.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -140,7 +183,10 @@
       <workItem from="1672923060256" duration="9053000" />
       <workItem from="1672933401713" duration="48000" />
       <workItem from="1672933458695" duration="279000" />
-      <workItem from="1672933844757" duration="121000" />
+      <workItem from="1672933844757" duration="1127000" />
+      <workItem from="1672935878268" duration="1378000" />
+      <workItem from="1672948935878" duration="1865000" />
+      <workItem from="1673019753649" duration="8747000" />
     </task>
     <servers />
   </component>

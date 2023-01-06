@@ -6,139 +6,82 @@ import java.util.*;
 
 public class PlantsEquator implements IPlants, IPlantObserver{
 
-    private final Set<Vector2d> equator = new HashSet<>();
+    private final List<Vector2d> equator = new ArrayList<>();
 
-    private final Set<Vector2d> nonEquator = new HashSet<>();
+    private final List<Vector2d> nonEquator = new ArrayList<>();
 
-    private int equatorStartRow;
-    private int mapWidth;
-    private int equatorEndRow;
+    private final int mapWidth, mapHeight;
 
-    private int equatorRows;
-
-    private int mapHeight;
+    private int equatorStartRow, equatorEndRow;
 
     private final Random generator = new Random();
 
-//    private void findEquator(){
-//        List<Integer> equator = new ArrayList<>();
-//        int equatorRows;
-//        int startUp, startDown;
-//        if(mapHeight % 2 == 1) {
-//            int middle = mapHeight / 2;
-//            equator.add(middle);
-//            startUp = middle - 1;
-//            startDown = middle + 1;
-//            equatorRows = mapHeight * 2 / 5 - 1;
-//        }
-//        else {
-//            startDown = mapHeight / 2;
-//            startUp = startDown - 1;
-//            equatorRows = mapHeight * 2 / 5;
-//        }
-//        for(int i=0; i<equatorRows/2; i++){
-//            equator.add(startUp - i);
-//            equator.add(startDown + i);
-//        }
-//    }
+    private void addRowsPositions(List<Vector2d> positions, int startRow, int endRow){
+        for(int y = startRow; y <= endRow; y++){
+            for(int x = 0; x < mapWidth; x++){
+                positions.add(new Vector2d(x ,y));
+            }
+        }
+    }
 
-    private void calcEquator(){
-        // TODO test and maybe debug
+    private void calcEquatorBorders(){
+        int equatorRows = mapHeight / 5;
+        int rowsLeft = equatorRows;
         if(mapHeight % 2 == 1){
             int middle = mapHeight / 2;
-            equatorRows = mapHeight / 5;
-            int rowsLeft = equatorRows;
             equatorStartRow = middle - equatorRows / 2;
             rowsLeft -= equatorRows / 2 + 1;
             equatorEndRow = middle + rowsLeft;
         }
         else{
-            equatorRows = mapHeight / 5;
-            int rowsLeft = equatorRows;
             equatorEndRow = mapHeight / 2 + equatorRows / 2 - 1;
             rowsLeft -= equatorRows / 2;
             equatorStartRow = equatorEndRow - rowsLeft;
         }
-        System.out.println(equatorStartRow);
-        System.out.println(equatorEndRow);
-        System.out.println(equatorRows);
     }
 
-    private boolean isInEquator(int row){
-        return row >= equatorStartRow && row <= equatorEndRow;
+    private void prepareAvailablePositions(){
+        addRowsPositions(equator, equatorStartRow, equatorEndRow);
+        addRowsPositions(nonEquator, 0, equatorStartRow - 1);
+        addRowsPositions(nonEquator, equatorEndRow + 1, mapHeight - 1);
     }
 
     public PlantsEquator(int mapWidth, int mapHeight){
         this.mapWidth = mapWidth;
         this.mapHeight = mapHeight;
-        calcEquator();
+        calcEquatorBorders();
+        prepareAvailablePositions();
     }
 
     private boolean equatorAccessible(){
-        return equator.size() < equatorRows * mapWidth;
+        return equator.size() > 0;
     }
 
     private boolean nonEquatorAccessible(){
-        return nonEquator.size() < (mapHeight - equatorRows) * mapWidth;
+        return nonEquator.size() > 0;
     }
 
-    private int yEquator(){
-        return generator.nextInt(equatorEndRow - equatorStartRow + 1) + equatorStartRow;
+    private Vector2d randomPosition(List<Vector2d> positions){
+        return positions.get(generator.nextInt(positions.size()));
     }
 
-    private Vector2d positionInsideEquator() throws IllegalArgumentException{
+
+    private synchronized Vector2d positionInsideEquator() throws CannotPlacePlantException{
         if(!equatorAccessible()){
-            throw new IllegalArgumentException("Can't place plant on preferred position");
+            throw new CannotPlacePlantException("Can't place plant on preferred position");
         }
-        Vector2d position;
-//        int i = 0;
-        do{
-//            System.out.println(i);
-            int y = yEquator();
-            int x = xRandom();
-            position = new Vector2d(x, y);
-//            i++;
-        }while(equator.contains(position));
-        return position;
+        return randomPosition(equator);
     }
 
-    private int yUnderEquator(){
-        return generator.nextInt(equatorStartRow);
-    }
-
-    private int yBelowEquator(){
-        return generator.nextInt(mapHeight - equatorEndRow - 1) + equatorEndRow + 1;
-    }
-
-    private int xRandom(){
-        return generator.nextInt(mapWidth);
-    }
-
-    private Vector2d positionOutsideEquator(){
-        if(!nonEquatorAccessible()){
-            throw new IllegalArgumentException("Can't place plant on non-preferred position");
+    private synchronized Vector2d positionOutsideEquator() throws CannotPlacePlantException{
+        if (!nonEquatorAccessible()) {
+            throw new CannotPlacePlantException("Can't place plant on non-preferred position");
         }
-        Vector2d position;
-//        System.out.println("outside");
-//        int i = 0;
-        do{
-//            System.out.println(i);
-            int x = xRandom();
-            int y;
-            if(generator.nextBoolean()){
-                y = yBelowEquator();
-            }
-            else{
-                y = yUnderEquator();
-            }
-            position = new Vector2d(x, y);
-//            i++;
-        }while(nonEquator.contains(position));
-        return position;
+        return randomPosition(nonEquator);
     }
 
     @Override
-    public Vector2d grow(boolean preferred) throws IllegalArgumentException{
+    public Vector2d grow(boolean preferred) throws CannotPlacePlantException{
         if(preferred){
             return positionInsideEquator();
         }
@@ -146,20 +89,20 @@ public class PlantsEquator implements IPlants, IPlantObserver{
     }
 
     @Override
-    public void plantEaten(Plant plant){
+    public void plantPlaced(Plant plant){
         Vector2d position = plant.getPosition();
         equator.remove(position);
         nonEquator.remove(position);
     }
 
     @Override
-    public void plantPlaced(Plant plant){
+    public void plantEaten(Plant plant){
         Vector2d position = plant.getPosition();
-        if(isInEquator(position.y)){
-            equator.add(position);
-        }
-        else {
+        if(position.y < equatorStartRow || position.y > equatorEndRow){
             nonEquator.add(position);
+        }
+        else{
+            equator.add(position);
         }
     }
 }

@@ -41,18 +41,18 @@ public record Preferences(
                 animalMinMutations,
                 animalMaxMutations);
 
-        IPlants iPlantsImplementation;
-        if (iPlants.equals("equator")) {
-            iPlantsImplementation = new PlantsEquator(width, height);
-        } else {
-            iPlantsImplementation = new PlantsToxicCorpses(width, height);
-        }
-        IEdge iEdgeImplementation;
-        if (iEdge.equals("earth")) {
-            iEdgeImplementation = new EdgeEarth(new Vector2d(0, 0), new Vector2d(width-1, height-1), width, height);
-        } else {
-            iEdgeImplementation = new EdgeHellPortal(new Vector2d(0, 0), new Vector2d(width-1, height-1));
-        }
+        IPlants iPlantsImplementation = switch(iPlants){
+            case "equator" -> new PlantsEquator(width, height);
+            case "toxic" -> new PlantsToxicCorpses(width, height);
+            default -> throw new UnsupportedOperationException("Plants' variant " + iPlants + " not implemented");
+        };
+
+        IEdge iEdgeImplementation = switch(iEdge){
+            case "earth" -> new EdgeEarth(width, height);
+            case "portal" -> new EdgeHellPortal(new Vector2d(0, 0), new Vector2d(width-1, height-1));
+            default -> throw new UnsupportedOperationException("Edges' variant " + iEdge + " not implemented");
+        };
+
         return new WorldMap(width,
                 height,
                 iEdgeImplementation,

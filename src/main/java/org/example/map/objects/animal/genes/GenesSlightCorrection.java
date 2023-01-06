@@ -1,6 +1,5 @@
 package org.example.map.objects.animal.genes;
 
-import org.example.map.objects.animal.Animal;
 import org.example.map.objects.animal.behavior.IAnimalBehavior;
 
 public class GenesSlightCorrection extends Genes{
