@@ -10,7 +10,6 @@ import org.example.map.objects.plants.Plant;
 import org.example.map.objects.plants.PlantsToxicCorpses;
 import org.example.map.options.IEdge;
 import org.example.map.objects.plants.IPlants;
-import org.example.utils.MapDirection;
 import org.example.utils.Vector2d;
 
 import java.util.*;
@@ -167,6 +166,7 @@ public class WorldMap implements IAnimalObserver, IPlantObserver {
         }
         numberOfAnimals++;
         animalList.add(animal);
+        animal.calculateAge(this.dayCunter);
     }
 
     @Override
@@ -236,7 +236,11 @@ public class WorldMap implements IAnimalObserver, IPlantObserver {
                         child.addObserver((PlantsToxicCorpses) iPlants);
                     }
                     child.place();
+                    child.setBornDay(this.dayCunter);
+                    child.calculateAge(this.dayCunter);
                 }
+                strongest.incrementChildren();
+                secondStrongest.incrementChildren();
             }
         });
     }

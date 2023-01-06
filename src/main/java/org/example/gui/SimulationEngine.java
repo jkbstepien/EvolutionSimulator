@@ -4,9 +4,7 @@ package org.example.gui;
 import javafx.application.Platform;
 import org.example.map.Statistics;
 import org.example.map.WorldMap;
-import org.example.map.objects.animal.Animal;
 import org.example.map.objects.animal.AnimalStatistics;
-import org.example.map.objects.animal.genes.Genes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +12,9 @@ import java.util.Optional;
 
 public class SimulationEngine extends Thread {
     private final WorldMap map;
-    private List<Statistics> statistics = new ArrayList<>();
-
-    private int dayCounter = 0;
     private final SimulationStage simulationStage;
+    private final List<Statistics> statistics = new ArrayList<>();
+    private final int dayCounter = 0;
 
     public SimulationEngine(WorldMap map, SimulationStage simulationStage) {
         this.map = map;
@@ -34,13 +31,13 @@ public class SimulationEngine extends Thread {
             animalStatistics.ifPresent(simulationStage::displayAnimalStats);
         });
     }
+
     @Override
     public void run() {
-//        while (map.numberOfAllAnimals() > 0) {
-        while(true){
+        while (true) {
             day();
             try {
-                Thread.sleep(300);
+                Thread.sleep(500);
             } catch (InterruptedException e) {
                 return;
             }

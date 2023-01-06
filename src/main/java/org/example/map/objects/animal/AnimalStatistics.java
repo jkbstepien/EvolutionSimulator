@@ -10,6 +10,7 @@ public record AnimalStatistics(
         int energy,
         int plantsEaten,
         int children,
-        int age
+        int age,
+        int bornDay
 ) {
 }

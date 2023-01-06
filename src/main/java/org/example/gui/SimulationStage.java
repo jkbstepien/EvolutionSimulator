@@ -20,7 +20,6 @@ import org.example.utils.Vector2d;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Optional;
 
 
 public class SimulationStage extends Stage implements IEngineRefreshObserver {
@@ -42,15 +41,14 @@ public class SimulationStage extends Stage implements IEngineRefreshObserver {
     private final Label averageEnergy = new Label("");
     private final Label averageLifespan = new Label("");
     private final Label day = new Label("");
+    private final Label trackedInfo = new Label("Click on animal to see its details:");
     private final Label trackedGenome = new Label("");
     private final Label trackedDirection = new Label("");
     private final Label trackedEnergy = new Label("");
     private final Label trackedPlants = new Label("");
     private final Label trackedChildren = new Label("");
     private final Label trackedAge = new Label("");
-
-
-
+    private final Label trackedBornDay = new Label("");
 
     public SimulationStage(Preferences preferences) {
         map = preferences.toWorldMap();
@@ -61,7 +59,7 @@ public class SimulationStage extends Stage implements IEngineRefreshObserver {
             }
         });
 
-        Button startSimulationButton = new Button("Play");
+        Button startSimulationButton = new Button("Pause");
         startSimulationButton.setOnMouseClicked(event -> {
             if (engine != null && engine.isAlive()) {
                 engine.interrupt();
@@ -112,11 +110,13 @@ public class SimulationStage extends Stage implements IEngineRefreshObserver {
                 averageLifespan,
                 day,
                 saveToFileButton,
+                trackedInfo,
                 trackedGenome,
                 trackedDirection,
                 trackedEnergy,
                 trackedPlants,
                 trackedChildren,
+                trackedBornDay,
                 trackedAge);
         main.getChildren().addAll(gridPane, right);
         layout.getChildren().add(main);
@@ -159,11 +159,12 @@ public class SimulationStage extends Stage implements IEngineRefreshObserver {
     }
 
     public void displayAnimalStats(AnimalStatistics statistics) {
-        trackedGenome.setText("Genome: " + statistics.genome());
-        trackedDirection.setText("Direction: " + statistics.direction());
+        trackedGenome.setText("Tracked Genome: " + statistics.genome());
+        trackedDirection.setText("Activated Genome (Direction): " + statistics.direction());
         trackedEnergy.setText("Energy: " + statistics.energy());
         trackedPlants.setText("Plants eaten: " + statistics.plantsEaten());
         trackedChildren.setText("Children: " + statistics.children());
+        trackedBornDay.setText("Born day: " + statistics.bornDay());
         trackedAge.setText("Age: " + statistics.age());
     }
     public void displayMapWithTracking() {
