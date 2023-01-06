@@ -13,12 +13,14 @@ import javafx.stage.Stage;
 import org.example.map.Statistics;
 import org.example.map.WorldMap;
 import org.example.map.objects.animal.Animal;
+import org.example.map.objects.animal.AnimalStatistics;
 import org.example.utils.Preferences;
 import org.example.utils.Vector2d;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Optional;
 
 
 public class SimulationStage extends Stage implements IEngineRefreshObserver {
@@ -40,6 +42,15 @@ public class SimulationStage extends Stage implements IEngineRefreshObserver {
     private final Label averageEnergy = new Label("");
     private final Label averageLifespan = new Label("");
     private final Label day = new Label("");
+    private final Label trackedGenome = new Label("");
+    private final Label trackedDirection = new Label("");
+    private final Label trackedEnergy = new Label("");
+    private final Label trackedPlants = new Label("");
+    private final Label trackedChildren = new Label("");
+    private final Label trackedAge = new Label("");
+
+
+
 
     public SimulationStage(Preferences preferences) {
         map = preferences.toWorldMap();
@@ -56,6 +67,9 @@ public class SimulationStage extends Stage implements IEngineRefreshObserver {
                 engine.interrupt();
                 saveToFileButton.setDisable(false);
                 startSimulationButton.setText("Play");
+                displayMapWithTracking();
+
+
             } else {
                 engine = new SimulationEngine(map, this);
                 engine.start();
@@ -97,7 +111,13 @@ public class SimulationStage extends Stage implements IEngineRefreshObserver {
                 averageEnergy,
                 averageLifespan,
                 day,
-                saveToFileButton);
+                saveToFileButton,
+                trackedGenome,
+                trackedDirection,
+                trackedEnergy,
+                trackedPlants,
+                trackedChildren,
+                trackedAge);
         main.getChildren().addAll(gridPane, right);
         layout.getChildren().add(main);
 
@@ -136,6 +156,75 @@ public class SimulationStage extends Stage implements IEngineRefreshObserver {
         averageEnergy.setText("Average energy: " + statistics.averageEnergy());
         averageLifespan.setText("Average lifespan: " + statistics.averageDeadLifespan());
         day.setText("Day: " + statistics.dayCounter());
+    }
+
+    public void displayAnimalStats(AnimalStatistics statistics) {
+        trackedGenome.setText("Genome: " + statistics.genome());
+        trackedDirection.setText("Direction: " + statistics.direction());
+        trackedEnergy.setText("Energy: " + statistics.energy());
+        trackedPlants.setText("Plants eaten: " + statistics.plantsEaten());
+        trackedChildren.setText("Children: " + statistics.children());
+        trackedAge.setText("Age: " + statistics.age());
+    }
+    public void displayMapWithTracking() {
+        gridPane.setGridLinesVisible(false);
+        gridPane.getColumnConstraints().clear();
+        gridPane.getRowConstraints().clear();
+        gridPane.getChildren().clear();
+        gridPane.setGridLinesVisible(true);
+
+        Vector2d lowerLeft = map.getLowerLeft();
+        Vector2d upperRight = map.getUpperRight();
+
+        int borderMargin = 1;
+        int maxValueX = upperRight.x - lowerLeft.x + borderMargin;
+        int maxValueY = upperRight.y - lowerLeft.y + borderMargin;
+
+        // Add map labels to gridPane.
+        for (int y = 0; y <= maxValueY; y++) {
+            for (int x = 0; x <= maxValueX; x++) {
+                int mapBorderX = lowerLeft.x + x - borderMargin;
+                int mapBorderY = upperRight.y - y + borderMargin;
+                Vector2d pos = new Vector2d(mapBorderX, mapBorderY);
+                StackPane cell = new StackPane();
+                if (x != 0 && y != 0) {
+                    cell.setBackground(new Background(new BackgroundFill(Color.GREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+                    cell.onMouseClickedProperty().set(event -> {
+                        map.setTrackedAnimal(new Vector2d(pos.x, pos.y));
+                        map.getTrackedAnimalStatistics().ifPresent(this::displayAnimalStats);});
+                }
+
+                String name = nameMapLabels(lowerLeft, upperRight, borderMargin, x, y);
+                Label label = new Label(name);
+                cell.getChildren().add(label);
+
+                gridPane.add(cell, x, y, 1, 1);
+                GridPane.setHalignment(cell, HPos.CENTER);
+            }
+        }
+
+        map.animalsWithDominantGenes().stream().map(Animal::getPosition).forEach(position -> {
+            StackPane cell = new StackPane();
+            cell.setBackground(new Background(new BackgroundFill(Color.YELLOW, CornerRadii.EMPTY, Insets.EMPTY)));
+            String name = nameMapLabels(lowerLeft, upperRight, borderMargin, position.x+1, map.getHeight() - position.y);
+            Label label = new Label(name);
+            cell.getChildren().add(label);
+            gridPane.add(cell, position.x+1, map.getHeight() - position.y, 1, 1);
+            cell.onMouseClickedProperty().set(event -> { map.setTrackedAnimal(new Vector2d(position.x, position.y));
+                map.getTrackedAnimalStatistics().ifPresent(this::displayAnimalStats);
+                map.getTrackedAnimalStatistics().ifPresent(this::displayAnimalStats);
+            });
+            GridPane.setHalignment(cell, HPos.CENTER);
+        });
+
+        // Format gridPane as well as set constraints on columns and rows.
+        for (int y = 0; y <= maxValueY; y++) {
+            gridPane.getRowConstraints().add(new RowConstraints(this.mapHeight));
+        }
+
+        for (int x = 0; x <= maxValueX; x++) {
+            gridPane.getColumnConstraints().add(new ColumnConstraints(this.mapWidth));
+        }
     }
 
     public void displayMap() {
@@ -191,7 +280,6 @@ public class SimulationStage extends Stage implements IEngineRefreshObserver {
             gridPane.getColumnConstraints().add(new ColumnConstraints(this.mapWidth));
         }
     }
-
     @Override
     public void refreshNeeded() {
         Platform.runLater(this::displayMap);

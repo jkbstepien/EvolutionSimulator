@@ -1,6 +1,7 @@
 package org.example.map;
 
 import org.example.map.objects.animal.Animal;
+import org.example.map.objects.animal.AnimalStatistics;
 import org.example.map.objects.animal.IAnimalObserver;
 import org.example.map.objects.animal.genes.Genes;
 import org.example.map.objects.animal.genes.GenesFactory;
@@ -9,6 +10,7 @@ import org.example.map.objects.plants.Plant;
 import org.example.map.objects.plants.PlantsToxicCorpses;
 import org.example.map.options.IEdge;
 import org.example.map.objects.plants.IPlants;
+import org.example.utils.MapDirection;
 import org.example.utils.Vector2d;
 
 import java.util.*;
@@ -48,6 +50,8 @@ public class WorldMap implements IAnimalObserver, IPlantObserver {
 
     private List<Animal> animalList = new ArrayList<>();
     private List<Statistics> statistics = new ArrayList<>();
+
+    private Optional<Animal> trackedAnimal = Optional.empty();
 
 
     public WorldMap(int width,
@@ -339,5 +343,15 @@ public class WorldMap implements IAnimalObserver, IPlantObserver {
         return animalList.stream()
                 .filter(animal -> mostPopularGenotypes.contains(animal.getGenes().getGenotype()))
                 .toList();
+    }
+
+    public Optional<AnimalStatistics> getTrackedAnimalStatistics(){
+        return trackedAnimal.map(Animal::getStatistics);
+    }
+
+    public void setTrackedAnimal(Vector2d position) {
+        if (animals.containsKey(position)) {
+            trackedAnimal = Optional.of(animals.get(position).get(0));
+        }
     }
 }

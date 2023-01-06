@@ -5,10 +5,12 @@ import javafx.application.Platform;
 import org.example.map.Statistics;
 import org.example.map.WorldMap;
 import org.example.map.objects.animal.Animal;
+import org.example.map.objects.animal.AnimalStatistics;
 import org.example.map.objects.animal.genes.Genes;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class SimulationEngine extends Thread {
     private final WorldMap map;
@@ -24,10 +26,12 @@ public class SimulationEngine extends Thread {
 
     private void day() {
         Statistics currentStats = map.day();
+        Optional<AnimalStatistics> animalStatistics = map.getTrackedAnimalStatistics();
 
         Platform.runLater(() -> {
             simulationStage.displayMap();
             simulationStage.displayStats(currentStats);
+            animalStatistics.ifPresent(simulationStage::displayAnimalStats);
         });
     }
     @Override

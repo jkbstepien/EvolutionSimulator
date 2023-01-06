@@ -121,4 +121,8 @@ public class Animal implements IMapElement {
     public int getAge(){
         return age;
     }
+
+    public AnimalStatistics getStatistics(){
+        return new AnimalStatistics(genes.getGenotype(), direction, energy, 0,0, 0);
+    }
 }
