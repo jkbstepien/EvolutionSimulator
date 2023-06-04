@@ -57,32 +57,6 @@ public enum MapDirection {
         return MapDirection.fromInt(random.nextInt(8));
     }
 
-    public MapDirection previous(){
-        return switch (this) {
-            case NORTH -> NORTHWEST;
-            case SOUTH -> SOUTHEAST;
-            case EAST -> NORTHEAST;
-            case WEST -> SOUTHWEST;
-            case NORTHWEST -> WEST;
-            case NORTHEAST -> NORTH;
-            case SOUTHWEST -> SOUTH;
-            case SOUTHEAST -> EAST;
-        };
-    }
-
-    public MapDirection next(){
-        return switch (this) {
-            case NORTH -> NORTHEAST;
-            case SOUTH -> SOUTHWEST;
-            case EAST -> SOUTHEAST;
-            case WEST -> NORTHWEST;
-            case NORTHWEST -> NORTH;
-            case NORTHEAST -> EAST;
-            case SOUTHWEST -> WEST;
-            case SOUTHEAST -> SOUTH;
-        };
-    }
-
     public MapDirection opposite(){
         return switch (this) {
             case NORTH -> SOUTH;
