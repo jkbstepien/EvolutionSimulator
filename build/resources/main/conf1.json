@@ -1,0 +1,18 @@
+{
+  "width": 1,
+  "height": 1,
+  "iEdge": "earth",
+  "numberOfPlantsAtStart": 10,
+  "plantEnergy": 0,
+  "plantsSeededEachDay": 2,
+  "iPlants": "toxic",
+  "numberOfAnimalsAtStart": 1,
+  "animalEnergy": 2000000,
+  "animalEnergyBreedingThreshold": 50,
+  "animalBreedingCost": 50,
+  "animalMinMutations": 2,
+  "animalMaxMutations": 5,
+  "genesLength": 10,
+  "isCrazyBehavior": false,
+  "isFullRandom": true
+}
